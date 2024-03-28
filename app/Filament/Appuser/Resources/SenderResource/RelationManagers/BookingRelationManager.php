@@ -32,6 +32,7 @@ use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use App\Filament\Appuser\Resources\AgentResource;
 use App\Filament\Appuser\Resources\BookingResource;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Appuser\Resources\TransactionResource;
@@ -113,7 +114,8 @@ class BookingRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('payment_balance')->label('Balance')->money('USD'),
                 Tables\Columns\TextColumn::make('refund_amount')->label('Refund')
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('agent.full_name')->label('Agent'),
+                Tables\Columns\TextColumn::make('agent.full_name')->label('Agent')
+                ->url(fn (Model $record) => AgentResource::getUrl('edit', ['record' => $record->agent_id ?? 0])),
                 // ->url(fn (Model $record) => AgentResource::getUrl('edit', $record->agent)),
                 Tables\Columns\IconColumn::make('agent.agent_type')->label('In-House Agent')->boolean()->toggleable(),
                 Tables\Columns\TextColumn::make('note')->label('Notes')
