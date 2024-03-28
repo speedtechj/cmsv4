@@ -231,11 +231,14 @@ class BookingRelationManager extends RelationManager
                                 $record->update(['is_paid' => $paid_is]);
                             }
                         }),
-                    Tables\Actions\DeleteAction::make()
-                        ->label('Delete')
-                        ->icon('heroicon-o-trash')
-
-                ])
+                        Tables\Actions\Action::make('barcode')
+                        ->color('success')
+                        ->icon('heroicon-o-qrcode')
+                        ->label('Print Barcode')
+                        ->url(fn (Booking $record) => route('barcode1.pdf.download', $record))
+                        ->openUrlInNewTab(),
+                
+                        ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
