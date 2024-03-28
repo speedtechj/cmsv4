@@ -1,0 +1,565 @@
+<?php
+
+namespace App\Filament\Appuser\Resources\SenderResource\RelationManagers;
+
+use Filament\Forms;
+use Filament\Tables;
+use App\Models\Agent;
+use App\Models\Booking;
+use App\Models\Boxtype;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use App\Models\Discount;
+use App\Models\Receiver;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use App\Models\Paymenttype;
+use App\Models\Provincecan;
+use App\Models\Servicetype;
+use App\Models\Agentdiscount;
+use App\Models\Senderaddress;
+use App\Models\Bookingpayment;
+use App\Models\Catextracharge;
+use App\Services\PriceService;
+use Filament\Facades\Filament;
+use App\Models\Receiveraddress;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Tables\Actions\ActionGroup;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use App\Filament\Appuser\Resources\BookingResource;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Appuser\Resources\TransactionResource;
+use Filament\Resources\RelationManagers\RelationManager;
+
+class BookingRelationManager extends RelationManager
+{
+    protected static string $relationship = 'booking';
+
+    public function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+
+                Section::make('Sender Information')
+                    ->schema(static::getSenderdetailsFormschema())
+                    ->columnSpan('full'),
+                Section::make('Transaction Information')
+                    ->schema(static::getBookdetailsFormschema())->columns(3),
+            ]);
+    }
+
+    public function table(Table $table): Table
+    {
+        return $table
+            ->recordTitleAttribute('booking_invoice')
+            ->columns([
+                Tables\Columns\TextColumn::make('booking_invoice')
+                    ->label('Invoice')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('manual_invoice')
+                    ->label('Manual Invoice')
+                    ->sortable()
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('receiver.full_name')->label('Receiver')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\BadgeColumn::make('servicetype.description')->label('Type of Service')
+                    ->color(static function ($state): string {
+                        if ($state === 'Pickup') {
+                            return 'success';
+                        }
+
+                        return 'info';
+                    }),
+                Tables\Columns\TextColumn::make('boxtype.description'),
+                Tables\Columns\TextColumn::make('batch.id')
+                    ->label('Batch Number')
+                    ->sortable()
+                    ->searchable()
+                    ->getStateUsing(function (Model $record) {
+                        return $record->batch->batchno . " " . $record->batch->batch_year;
+                    }),
+                Tables\Columns\IconColumn::make('is_pickup')
+                    ->label('Is Pickup')
+                    ->boolean()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('zone.description')->toggleable(),
+                Tables\Columns\TextColumn::make('booking_date')->label('Pickup/Dropoff Date'),
+                Tables\Columns\TextColumn::make('start_time')->label('Pickup Time')
+                    ->getStateUsing(function (Model $record) {
+                        return $record->start_time . " - " . $record->end_time;
+                    }),
+                Tables\Columns\TextColumn::make('dimension')->label('Dimension')->toggleable(),
+                Tables\Columns\TextColumn::make('total_inches')->label('No. of Inches')->toggleable(),
+                Tables\Columns\TextColumn::make('discount.discount_amount')->label('Discount')->money('USD', ),
+                Tables\Columns\TextColumn::make('agentdiscount.discount_amount')->label('Agent Discount')->money('USD', ),
+                Tables\Columns\TextColumn::make('extracharge_amount')->money('USD'),
+                Tables\Columns\TextColumn::make('total_price')->money('USD', ),
+                Tables\Columns\TextColumn::make('payment_date')->datetime()->label('Payment Date')->sortable()->toggleable(),
+                Tables\Columns\IconColumn::make('is_paid')
+                    ->label('Paid')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle'),
+                // ToggleColumn::make('is_padi'),
+                Tables\Columns\TextColumn::make('payment_balance')->label('Balance')->money('USD'),
+                Tables\Columns\TextColumn::make('refund_amount')->label('Refund')
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('agent.full_name')->label('Agent'),
+                // ->url(fn (Model $record) => AgentResource::getUrl('edit', $record->agent)),
+                Tables\Columns\IconColumn::make('agent.agent_type')->label('In-House Agent')->boolean()->toggleable(),
+                Tables\Columns\TextColumn::make('note')->label('Notes')
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('user.id')
+                    ->label('Encoder')
+                    ->searchable()
+                    ->sortable()
+                    ->getStateUsing(function (Model $record) {
+                        return $record->user->first_name . " " . $record->user->last_name;
+                    })
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+            ])
+            ->filters([
+                //
+            ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make()
+                    ->url(fn($livewire) => TransactionResource::getUrl('create', ['ownerRecord' => $livewire->ownerRecord->getKey()])),
+
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make()
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['user_id'] = auth()->id();
+                        $data['payment_balance'] = $data['total_price'];
+                        if ($data['total_price'] == 0) {
+                            $data['is_paid'] = true;
+                            $data['payment_date'] = $data['booking_date'];
+
+                        }
+
+                        if ($data['servicetype_id'] == 2) {
+                            $data['agent_id'] = null;
+                            $data['start_time'] = null;
+                            $data['end_time'] = null;
+                        }
+                        if ($data['boxtype_id'] != 4) {
+                            $data['irregular_length'] = null;
+                            $data['irregular_width'] = null;
+                            $data['irregular_height'] = null;
+                        }
+                        return $data;
+                    }),
+
+
+                Tables\Actions\CreateAction::make()
+                    ->url(fn($livewire) => TransactionResource::getUrl('create', ['ownerRecord' => $livewire->ownerRecord->getKey()])),
+
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make()
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['user_id'] = auth()->id();
+                        $data['payment_balance'] = $data['total_price'];
+                        if ($data['total_price'] == 0) {
+                            $data['is_paid'] = true;
+                            $data['payment_date'] = $data['booking_date'];
+
+                        }
+
+                        if ($data['servicetype_id'] == 2) {
+                            $data['agent_id'] = null;
+                            $data['start_time'] = null;
+                            $data['end_time'] = null;
+                        }
+                        if ($data['boxtype_id'] != 4) {
+                            $data['irregular_length'] = null;
+                            $data['irregular_width'] = null;
+                            $data['irregular_height'] = null;
+                        }
+                        return $data;
+                    }),
+                Tables\Actions\DeleteAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\Action::make('Payment')
+                        ->hidden(fn(Booking $record): bool => $record['payment_balance'] == 0)
+                        ->model(Bookingpayment::class)
+                        ->label('Received Payment')
+                        ->icon('heroicon-o-pencil')
+                        ->form([
+                            Section::make()
+                                ->schema(static::getPaymentform())
+
+                        ])
+                        ->action(function (Booking $record, array $data): void {
+                            if ($record['payment_balance'] != 0) {
+                                Bookingpayment::create([
+                                    'booking_id' => $record->id,
+                                    'paymenttype_id' => $data['type_of_payment'],
+                                    'payment_date' => $data['payment_date'],
+                                    'reference_number' => $data['reference_number'],
+                                    'booking_invoice' => $record['booking_invoice'],
+                                    'payment_amount' => $data['Amount'],
+                                    'user_id' => auth()->id(),
+                                    'sender_id' => $record['sender_id'],
+
+                                ]);
+                                $record->update(['payment_date' => $data['payment_date']]);
+                                $current_balance = $record['payment_balance'] - $data['Amount'];
+                                if ($current_balance >= 0) {
+                                    $record->update(['payment_balance' => $current_balance]);
+                                    Notification::make()
+                                        ->title('Saved successfully')
+                                        ->send();
+                                } else {
+                                    Notification::make()
+                                        ->iconColor('danger')
+                                        ->title('Amount Paid is greater than the balance')
+                                        ->send();
+                                }
+                                $paid_is = $current_balance == 0 ? 1 : 0;
+                                $record->update(['is_paid' => $paid_is]);
+                            }
+                        }),
+                    Tables\Actions\DeleteAction::make()
+                        ->label('Delete')
+                        ->icon('heroicon-o-trash')
+
+                ])
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('Received Payment')
+                        ->label('Received Payment')
+                        ->color('warning')
+                        ->icon('heroicon-o-currency-dollar')
+                        ->form([
+                            Section::make()
+                                ->schema(static::getBulkpayment())
+
+                        ])->action(function (Collection $records, array $data, $action) {
+                            $records->each(function ($record) use ($data) {
+                                if ($record->payment_balance != 0) {
+
+                                    Bookingpayment::create([
+                                        'booking_id' => $record->id,
+                                        'paymenttype_id' => $data['type_of_payment'],
+                                        'payment_date' => $data['payment_date'],
+                                        'reference_number' => $data['reference_number'],
+                                        'booking_invoice' => $record->booking_invoice,
+                                        'payment_amount' => $record->payment_balance,
+                                        'user_id' => auth()->id(),
+                                        'sender_id' => $record->sender_id,
+                                    ]);
+                                    $record->update(['payment_date' => $data['payment_date']]);
+                                    Booking::where('id', $record->id)->update([
+                                        'payment_balance' => 0,
+                                        'is_paid' => true,
+                                    ]);
+
+                                }
+                            });
+                            Notification::make()
+                                ->icon('heroicon-o-document-text')
+                                ->iconColor('success')
+                                ->title('Payment Successfully received')
+                                ->send();
+
+                        }),
+                ]),
+            ]);
+    }
+    public static function getSenderdetailsFormSchema(): array
+    {
+        return [
+            Forms\Components\Select::make('senderaddress_id')
+                ->options(function (RelationManager $livewire, Get $get, Set $set, $state) {
+                    return Senderaddress::Senderaddresslist($livewire->ownerRecord->getKey());
+                })
+                ->label('Sender Address')
+                ->required(),
+        ];
+    }
+    public static function getBookdetailsFormschema(): array
+    {
+        return [
+            Forms\Components\Select::make('receiver_id')
+                ->live()
+                ->options(function (Get $get, Set $set, $state) {
+                    return Receiver::Receiverlist($get('sender_id'));
+
+                })
+                ->label('Receiver Name')
+                ->required()
+                ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                    $set('receiveraddress_id', null);
+                }),
+            Forms\Components\Select::make('receiveraddress_id')
+                ->label('Receiver Address')
+                ->live()
+                ->options(function (Get $get, Set $set, $state) {
+                    return Receiveraddress::Receiveraddresslist($get('receiver_id'));
+                })
+                ->required()
+                ->afterStateUpdated(function (PriceService $priceService, Get $get, Set $set, $state) {
+                    $priceService->calculatePrice($state, $get, $set);
+                }),
+            Forms\Components\TextInput::make('manual_invoice')
+                ->label('Manual Invoice'),
+            Forms\Components\Select::make('boxtype_id')
+                ->live()
+                ->options(Boxtype::all()->pluck('description', 'id'))
+                ->searchable()
+                ->searchPrompt('Please type to Search Box Type')
+                ->label('Box Type')
+                ->required()
+                ->selectablePlaceholder(false)
+                ->afterStateUpdated(function (PriceService $priceService, Get $get, Set $set, $state) {
+                    if ($get('boxtype_id') == 4) {
+                        $set('irregular_length', null);
+                        $set('irregular_width', null);
+                        $set('irregular_height', null);
+                    }
+                    $priceService->calculatePrice($state, $get, $set);
+                }),
+            Forms\Components\Select::make('servicetype_id')
+                ->live()
+                ->options(Servicetype::all()->pluck('description', 'id'))
+                ->label('Service Type')
+                ->required()
+                ->afterStateUpdated(function (PriceService $priceService, Get $get, Set $set, $state) {
+                    $set('start_time', null);
+                    $set('end_time', null);
+                    $priceService->Resetdiscount($set, $get);
+                    $priceService->calculatePrice($state, $get, $set);
+                }),
+            Forms\Components\Select::make('agent_id')
+                ->live()
+                ->searchable()
+                ->selectablePlaceholder(false)
+                ->preload()
+                ->searchPrompt('Please type to Search Agent')
+                ->label('Agent')
+                ->required()
+                ->options(Agent::Agentlist()->all())
+                ->hidden(fn(Get $get): bool => $get('servicetype_id') == '2' || $get('servicetype_id') == null)
+                ->afterStateUpdated(function (PriceService $priceService, Get $get, Set $set, $state) {
+                    $priceService->calculatePrice($state, $get, $set);
+                }),
+            Forms\Components\Hidden::make('zone_id')
+                ->required(),
+            Forms\Components\Hidden::make('branch_id')
+                ->required()
+                ->default(auth()->user()->branch_id),
+            Forms\Components\Hidden::make('batch_id')
+                ->default(23),
+            Forms\Components\DatePicker::make('booking_date')
+                ->closeOnDateSelection()
+                ->label('Booking Date')
+                ->native(false)
+                ->required()
+                ->default(now()->format('Y-m-d')),
+            Forms\Components\TimePicker::make('start_time')
+                ->datalist([
+                    '07:00',
+                    '08:00',
+                    '09:00',
+                    '10:00',
+                    '11:00',
+                    '12:00',
+                    '13:00',
+                    '14:00',
+                    '15:00',
+                    '16:00',
+                    '17:00',
+                    '18:00',
+                    '19:00',
+                    '20:00',
+                    '21:00',
+                    '22:00'
+
+                ])
+                ->required(function (Get $get): bool {
+                    $typeagent = Agent::Agenttype($get('agent_id'));
+                    return $typeagent == 1;
+                })
+                ->prefix('Start')
+                ->label('Start Time')
+                ->visible(fn(Get $get): bool => $get('servicetype_id') == '1'),
+            Forms\Components\TimePicker::make('end_time')
+                ->prefix('End')
+                ->datalist([
+                    '07:00',
+                    '08:00',
+                    '09:00',
+                    '10:00',
+                    '11:00',
+                    '12:00',
+                    '13:00',
+                    '14:00',
+                    '15:00',
+                    '16:00',
+                    '17:00',
+                    '18:00',
+                    '19:00',
+                    '20:00',
+                    '21:00',
+                    '22:00'
+
+                ])
+                ->required(function (Get $get): bool {
+                    $typeagent = Agent::Agenttype($get('agent_id'));
+                    return $typeagent == 1;
+                })
+                ->label('End Time')
+                ->visible(fn(Get $get): bool => $get('servicetype_id') == '1'),
+            Forms\Components\Select::make('catextracharge_id')
+                ->live()
+                ->options(Catextracharge::all()->pluck('name', 'id'))
+                ->label('Extra Charge')
+                ->searchable()
+                ->searchPrompt('Please type to Search Extra Charge')
+                ->afterStateUpdated(function (PriceService $priceService, Get $get, Set $set, $state) {
+                    $priceService->Resetdiscount($set, $get);
+                    $priceService->Extracharge($set, $get, $state);
+                    $priceService->calculatePrice($state, $get, $set);
+                }),
+            Forms\Components\TextInput::make('extracharge_amount')
+                ->live(debounce: 1000)
+                ->numeric()
+                ->visible(fn(Get $get): bool => $get('catextracharge_id') != null)
+                ->afterStateUpdated(function (PriceService $priceService, Get $get, Set $set, $state) {
+                    $priceService->Extracharge($set, $get, $state);
+                    $priceService->calculatePrice($state, $get, $set);
+                }),
+            Forms\Components\Select::make('discount_id')
+                ->live()
+                ->label('Discount')
+                ->searchable()
+                ->hidden(fn(Get $get): bool => $get('discount_flag') == '0')
+                ->searchPrompt('Please type to Search Discount')
+                ->options(function (Get $get, Set $set, $state) {
+                    return Discount::Officediscount($get('zone_id'), $get('servicetype_id'), $get('boxtype_id'));
+                })
+                ->afterStateUpdated(function (PriceService $priceService, Get $get, Set $set, $state) {
+                    $priceService->officediscount($set, $get);
+                    $priceService->calculatePrice($state, $get, $set);
+                }),
+            Forms\Components\Select::make('agentdiscount_id')
+                ->live()
+                ->label('Agent Discount')
+                ->searchable()
+                ->hidden(fn(Get $get): bool => $get('discount_flag') != '0')
+                ->searchPrompt('Please type to Search Discount')
+                ->options(function (Get $get, Set $set, $state) {
+                    return Agentdiscount::Agentdiscountlist($get('zone_id'), $get('agent_id'), $get('servicetype_id'), $get('boxtype_id'));
+                })
+                ->afterStateUpdated(function (PriceService $priceService, Get $get, Set $set, $state) {
+                    $priceService->Agentdiscount($set, $get);
+                    $priceService->calculatePrice($state, $get, $set);
+
+                }),
+            Forms\Components\TextInput::make('total_inches')
+                ->live(debounce: 1000)
+                ->numeric()
+                ->hidden(fn(Get $get): bool => $get('boxtype_id') != '9')
+                ->afterStateUpdated(function (PriceService $priceService, Get $get, Set $set, $state) {
+                    $priceService->calculatePrice($state, $get, $set);
+                }),
+            Forms\Components\Hidden::make('discount_flag')
+                ->default(1)
+                ->dehydrated(false),
+            Forms\Components\TextInput::make(
+                'total_price'
+            )->prefix('$')
+                ->label('Total Price')
+                ->numeric()
+                ->columnSpanFull(),
+            Forms\Components\TextInput::make('irregular_length')
+                ->live(debounce: 1000)
+                ->numeric()
+                ->visible(fn(Get $get): bool => $get('boxtype_id') == '4')
+                ->afterStateUpdated(function (PriceService $priceService, Get $get, Set $set, $state) {
+                    $priceService->Computeirregular($set, $get);
+                    $priceService->calculatePrice($state, $get, $set);
+                }),
+            Forms\Components\TextInput::make('irregular_width')
+                ->live(debounce: 1000)
+                ->numeric()
+                ->visible(fn(Get $get): bool => $get('boxtype_id') == '4')
+                ->afterStateUpdated(function (PriceService $priceService, Get $get, Set $set, $state) {
+                    $priceService->Computeirregular($set, $get);
+                    $priceService->calculatePrice($state, $get, $set);
+                }),
+            Forms\Components\TextInput::make('irregular_height')
+                ->live(debounce: 1000)
+                ->numeric()
+                ->visible(fn(Get $get): bool => $get('boxtype_id') == '4')
+                ->afterStateUpdated(function (PriceService $priceService, Get $get, Set $set, $state) {
+                    $priceService->Computeirregular($set, $get);
+                    $priceService->calculatePrice($state, $get, $set);
+                }),
+            Forms\Components\MarkdownEditor::make('note')
+                ->columnSpanFull(),
+            Forms\Components\Toggle::make('is_pickup')
+                ->required(),
+            Forms\Components\Toggle::make('box_replacement')
+                ->required(),
+        ];
+    }
+    public function getPaymentform(): array
+    {
+        return [
+            Forms\Components\Select::make('type_of_payment')
+                ->required()
+                ->label('Mode Of Payment')
+                ->options(Paymenttype::all()->pluck('name', 'id'))
+                ->searchable()
+                ->reactive(),
+            Forms\Components\DatePicker::make('payment_date')->required()->default(now())
+                ->native(false)
+                ->closeOnDateSelection(),
+            Forms\Components\TextInput::make('reference_number')->label('Authorization Code/Reference Number/Cheque Number')
+                ->disabled(
+                    fn(Get $get): bool => $get('type_of_payment') == 4
+                ),
+
+            Forms\Components\TextInput::make('Amount')->label('Payment Amount')
+                ->required(),
+
+            Forms\Components\TextInput::make('Booking_Balance')
+                ->label('Amount Due')
+                ->default(function (Booking $record) {
+                    return $record->payment_balance;
+                })->disabled(),
+        ];
+    }
+    public function getBulkpayment(): array
+    {
+        return [
+            Forms\Components\Select::make('type_of_payment')
+                ->required()
+                ->label('Mode Of Payment')
+                ->options(Paymenttype::all()->pluck('name', 'id'))
+                ->searchable()
+                ->reactive(),
+            Forms\Components\DatePicker::make('payment_date')->required()->default(now())
+                ->closeOnDateSelection(),
+            TextInput::make('reference_number')->label('Authorization Code/Reference Number/Cheque Number')
+                ->disabled(
+                    fn(Get $get): bool => $get('type_of_payment') == 4
+                ),
+        ];
+    }
+}
