@@ -231,9 +231,15 @@ class BookingRelationManager extends RelationManager
                                 $record->update(['is_paid' => $paid_is]);
                             }
                         }),
+                        Tables\Actions\Action::make('print')
+                        ->label('Print Invoice')
+                        ->color('warning')
+                        ->icon('heroicon-o-printer')
+                        ->url(fn (Booking $record) => route('barcode.pdf.download', $record))
+                        ->openUrlInNewTab(),
                         Tables\Actions\Action::make('barcode')
                         ->color('success')
-                        ->icon('heroicon-o-qrcode')
+                        ->icon('heroicon-o-qr-code')
                         ->label('Print Barcode')
                         ->url(fn (Booking $record) => route('barcode1.pdf.download', $record))
                         ->openUrlInNewTab(),
@@ -280,6 +286,7 @@ class BookingRelationManager extends RelationManager
                                 ->send();
 
                         }),
+                         
                 ]),
             ]);
     }

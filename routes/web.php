@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BarcodeController;
+use App\Http\Controllers\InvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,5 +14,6 @@ use App\Http\Controllers\BarcodeController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('{record}/barcode',[BarcodeController::class,'generate'])->name('barcode1.pdf.download');
+Route::get('{record}/barcode',[BarcodeController::class,'barcode'])->name('barcode1.pdf.download');
+Route::get('{record}/pdf',[InvoiceController::class,'invoice'])->name('barcode.pdf.download');
 

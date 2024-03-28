@@ -92,18 +92,18 @@ class Booking extends Model
     // {
     //     return $this->belongsTo(Transaction::class, 'booking_id');
     // }
-    // public function bookingpayment()
-    // {
-    //     return $this->hasMany(Bookingpayment::class);
-    // }
+    public function bookingpayment()
+    {
+        return $this->hasMany(Bookingpayment::class);
+    }
     // public function bookingrefund()
     // {
     //     return $this->hasMany(Bookingrefund::class);
     // }
-    // public function packinglist()
-    // {
-    //     return $this->hasMany(packinglist::class);
-    // }
+    public function packinglist()
+    {
+        return $this->hasMany(packinglist::class);
+    }
     public function user(){
         return $this->belongsTo(User::class);
     }
