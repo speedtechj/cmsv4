@@ -15,4 +15,9 @@ class Batch extends Model
     public function User(){
         return $this->belongsTo(User::class);
     }
+
+    public function scopeBatchmanifest($query){
+        return $query->where('is_active', 1)->get()->pluck('batchno', 'id');
+        
+    }
 }

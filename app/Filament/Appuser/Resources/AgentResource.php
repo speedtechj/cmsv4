@@ -2,6 +2,7 @@
 
 namespace App\Filament\Appuser\Resources;
 
+use App\Filament\Appuser\Resources\AgentResource\RelationManagers\BookingRelationManager;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Agent;
@@ -205,7 +206,7 @@ class AgentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            BookingRelationManager::class,
         ];
     }
 

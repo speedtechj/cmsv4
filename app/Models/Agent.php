@@ -23,9 +23,9 @@ class Agent extends Model
     public function provincecan(){
         return $this->belongsTo(Provincecan::class);
     }
-    // public function booking(){
-    //     return $this->hasMany(Booking::class);
-    // }
+    public function booking(){
+        return $this->hasMany(Booking::class);
+    }
 
     public function scopeAgentlist($query){
        return $query->select('full_name','id')->pluck('full_name', 'id');
