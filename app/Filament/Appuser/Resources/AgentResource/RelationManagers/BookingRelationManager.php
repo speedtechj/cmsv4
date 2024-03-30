@@ -23,7 +23,9 @@ use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Appuser\Resources\SenderResource;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Appuser\Resources\ReceiverResource;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class BookingRelationManager extends RelationManager
@@ -56,11 +58,12 @@ class BookingRelationManager extends RelationManager
                     ->searchable(),
                 Tables\Columns\TextColumn::make('sender.full_name')->label('Sender')
                     ->sortable()
-                    ->searchable(),
-                // ->url(fn (Booking $record) => route('filament.resources.senders.edit', $record->sender)),
+                    ->searchable()
+                    ->url(fn (Model $record) => SenderResource::getUrl('edit', ['record' => $record->sender])),
                 Tables\Columns\TextColumn::make('receiver.full_name')->label('Receiver')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->url(fn (Model $record) => ReceiverResource::getUrl('edit', ['record' => $record->receiver])),
                 Tables\Columns\BadgeColumn::make('servicetype.description')->label('Type of Service')
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->color(static function ($state): string {
