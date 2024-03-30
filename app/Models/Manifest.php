@@ -57,7 +57,7 @@ class Manifest extends Model
     }
     public function bookingpayment()
     {
-        return $this->hasMany(Bookingpayment::class);
+        return $this->hasMany(Bookingpayment::class, 'booking_id');
     }
     
     

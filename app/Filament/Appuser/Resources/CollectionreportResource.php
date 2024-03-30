@@ -10,10 +10,10 @@ use App\Models\Collectionreport;
 use Filament\Resources\Resource;
 use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Section;
+use App\Exports\CollectionreportExport;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Actions\ExportBulkAction;
-use App\Filament\Exports\CollectionreportExporter;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Appuser\Resources\CollectionreportResource\Pages;
 use App\Filament\Appuser\Resources\CollectionreportResource\RelationManagers;
@@ -117,8 +117,9 @@ class CollectionreportResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    ExportBulkAction::make()
-                    ->exporter(CollectionreportExporter::class)
+                    Tables\Actions\BulkAction::make('xls')->label('Export to Excel')
+                    ->icon('heroicon-o-arrow-down-on-square')
+                    ->action(fn (Collection $records) => (new CollectionreportExport($records))->download('collection.xlsx')),
                 ]),
             ]);
     }
