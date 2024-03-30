@@ -294,16 +294,15 @@
             <th>DESCRIPTION</th>
             <th>AMOUNT</th>
         </tr>
-        @if ($packinglist->count() !== 0)
+        @if ($count !== 0)
             <tr>
-                @foreach ($packinglist as $packinglist)
+                @for ($i = 0; $i < $count; $i++) 
             <tr>
-                <td>{{ $packinglist->quantity }}</td>
-                <td>{{ $packinglist->packlistitem->itemname }}</td>
-                <td>{{ $packinglist->price }}</td>
-                {{-- <td>{{ $packinglist->price ?? 0}}</td> --}}
+                <td>{{ $packinglist[$i]['quantity']}}</td>
+                <td>{{ $packinglist[$i]['packlistitem'] }}</td>
+                <td>{{ $packinglist[$i]['price'] }}</td>
             </tr>
-        @endforeach
+        @endfor
         </tr>
     @else
         @for ($i = 0; $i < 3; $i++)

@@ -23,4 +23,5 @@ class Packinglist extends Model
     public function sender(){
         return $this->belongsTo(Sender::class);
     }
+
 }
