@@ -23,6 +23,7 @@ use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use App\Filament\Appuser\Resources\SenderResource;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Appuser\Resources\ReceiverResource;
@@ -243,8 +244,61 @@ class BookingRelationManager extends RelationManager
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('Received Payment')
+                    ->label('Received Payment')
+                    ->color('warning')
+                    ->icon('heroicon-o-currency-dollar')
+                    ->form([
+                        Section::make()
+                            ->schema(static::getBulkpayment())
+
+                    ])->action(function (Collection $records, array $data, $action) {
+                        $records->each(function ($record) use ($data) {
+                            if ($record->payment_balance != 0) {
+
+                                Bookingpayment::create([
+                                    'booking_id' => $record->id,
+                                    'paymenttype_id' => $data['type_of_payment'],
+                                    'payment_date' => $data['payment_date'],
+                                    'reference_number' => $data['reference_number'],
+                                    'booking_invoice' => $record->booking_invoice,
+                                    'payment_amount' => $record->payment_balance,
+                                    'user_id' => auth()->id(),
+                                    'sender_id' => $record->sender_id,
+                                ]);
+                                $record->update(['payment_date' => $data['payment_date']]);
+                                Booking::where('id', $record->id)->update([
+                                    'payment_balance' => 0,
+                                    'is_paid' => true,
+                                ]);
+
+                            }
+                        });
+                        Notification::make()
+                            ->icon('heroicon-o-document-text')
+                            ->iconColor('success')
+                            ->title('Payment Successfully received')
+                            ->send();
+
+                    }),
                 ]),
             ]);
+    }
+    public function getBulkpayment(): array
+    {
+        return [
+            Forms\Components\Select::make('type_of_payment')
+                ->required()
+                ->label('Mode Of Payment')
+                ->options(Paymenttype::all()->pluck('name', 'id'))
+                ->searchable()
+                ->reactive(),
+            Forms\Components\DatePicker::make('payment_date')->required()->default(now())
+                ->closeOnDateSelection(),
+            TextInput::make('reference_number')->label('Authorization Code/Reference Number/Cheque Number')
+                ->disabled(
+                    fn(Get $get): bool => $get('type_of_payment') == 4
+                ),
+        ];
     }
 }
