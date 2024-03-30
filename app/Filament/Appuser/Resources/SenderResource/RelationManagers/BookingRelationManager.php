@@ -13,9 +13,11 @@ use App\Models\Discount;
 use App\Models\Receiver;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\Packinglist;
 use App\Models\Paymenttype;
 use App\Models\Provincecan;
 use App\Models\Servicetype;
+use App\Models\Packlistitem;
 use App\Models\Agentdiscount;
 use App\Models\Senderaddress;
 use App\Models\Bookingpayment;
@@ -26,10 +28,12 @@ use App\Models\Receiveraddress;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Repeater;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use App\Filament\Appuser\Resources\AgentResource;
@@ -245,8 +249,31 @@ class BookingRelationManager extends RelationManager
                         ->label('Print Barcode')
                         ->url(fn (Booking $record) => route('barcode1.pdf.download', $record))
                         ->openUrlInNewTab(),
-                
-                        ])
+                        Tables\Actions\Action::make('Packlist')
+                        ->label('Packing list')
+                        ->color('info')
+                        ->icon('heroicon-o-clipboard-document-list')
+                        ->form([
+                            Section::make()->schema(static::getPacklistform())->columns(3)
+                        ])->action(function (Booking $record, array $data, $action) {
+                            
+                            Packinglist::create([
+                                'booking_id' => $record->id,
+                                'sender_id' => $record->sender_id,
+                                'packlistitem' => $data['packinglist'],
+                                'packlistdoc' => $data['packlist_doc'],
+                                'waiverdoc' => $data['waiver_doc'],
+                               
+                            ]);
+                           
+                            Notification::make()
+                            ->title('Record Successfully save')
+                            ->success()
+                            ->send();
+                            
+                        }),
+                    ])
+                        
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -572,6 +599,53 @@ class BookingRelationManager extends RelationManager
                 ->disabled(
                     fn(Get $get): bool => $get('type_of_payment') == 4
                 ),
+        ];
+    }
+
+    public function getPacklistform() : array {
+        return [
+            Section::make('Attached Documents')
+                            ->schema([
+                                FileUpload::make('packlist_doc')
+                                ->label('Packing List')
+                                ->multiple()
+                                ->enableDownload()
+                                ->disk('public')
+                                ->directory('packinglist')
+                                ->visibility('private')
+                                ->enableOpen(),
+                            FileUpload::make('waiver_doc')
+                                ->label(' Waiver')
+                                ->multiple()
+                                ->enableDownload()
+                                ->disk('public')
+                                ->directory('waiver')
+                                ->visibility('private')
+                                ->enableOpen(),
+                            ])->columns(2),
+                            Section::make('Details Packing List')
+                            ->schema([
+                                Repeater::make('packinglist')
+                                ->schema([
+                                    Forms\Components\TextInput::make('quantity')
+                                    ->label('Quantity')
+                                    ->numeric(),
+                            Forms\Components\Select::make('packlistitem')
+                                ->label('Premade Items')
+                                ->options(Packlistitem::all()->pluck('itemname', 'itemname'))
+                                ->searchable()
+                                ->columnSpan('2')
+                                ->disableOptionsWhenSelectedInSiblingRepeaterItems(),
+                            Forms\Components\TextInput::make('price')
+                            ->label('Price')
+                            ->prefix('$')
+                            ->columnSpan('1'),
+                                ])->columns(3)
+                                ->minItems(1)
+                                ->maxItems(3),
+                                
+                                ]),
+
         ];
     }
 }

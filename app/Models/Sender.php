@@ -32,8 +32,8 @@ class Sender extends Model
     // public function bookingrefund(){
     //     return $this->hasMany(Bookingrefund::class);
     // }
-    // public function packinglist(){
-    //     return $this->hasMany(Packinglist::class);
-    // }
+    public function packinglist(){
+        return $this->hasMany(Packinglist::class);
+    }
    
 }

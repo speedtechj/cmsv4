@@ -11,7 +11,8 @@ class Packinglist extends Model
     protected $guarded = [];
     protected $casts = [
         'packlistdoc' => 'array',
-        'waverdoc' => 'array',
+        'waiverdoc' => 'array',
+        'packlistitem' => 'array',
     ];
     public function packlistitem(){
         return $this->belongsTo(Packlistitem::class);

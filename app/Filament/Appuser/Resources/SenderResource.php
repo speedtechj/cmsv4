@@ -2,6 +2,7 @@
 
 namespace App\Filament\Appuser\Resources;
 
+use App\Filament\Appuser\Resources\SenderResource\RelationManagers\PackinglistRelationManager;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Sender;
@@ -119,6 +120,7 @@ class SenderResource extends Resource
             SenderaddressRelationManager::class,
             ReceiverRelationManager::class,
             BookingpaymentRelationManager::class,
+            PackinglistRelationManager::class,
            
            
         ];
