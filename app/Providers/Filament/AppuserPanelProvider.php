@@ -28,6 +28,7 @@ class AppuserPanelProvider extends PanelProvider {
         ->id( 'appuser' )
         ->path( '/' )
         ->spa()
+        ->databaseNotifications()
         ->brandName('Forex CMSv4')
         ->profile(EditProfile::class )
         ->login()

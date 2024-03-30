@@ -20,10 +20,14 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
+use App\Filament\Exports\BookingExporter;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Actions\ExportAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Filament\Tables\Actions\ExportBulkAction;
+use Filament\Actions\Exports\Enums\ExportFormat;
 use App\Filament\Appuser\Resources\SenderResource;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Appuser\Resources\ReceiverResource;
@@ -159,7 +163,14 @@ class BookingRelationManager extends RelationManager
                     })
             ])
             ->headerActions([
-                // Tables\Actions\CreateAction::make(),
+                ExportAction::make()
+                ->color('success')
+                ->label('Export Booking')
+                ->exporter(BookingExporter::class)
+                ->fileDisk('local')
+                ->formats([
+                    ExportFormat::Xlsx,
+                ])
             ])
             ->actions([
                 ActionGroup::make([
@@ -244,6 +255,15 @@ class BookingRelationManager extends RelationManager
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    ExportBulkAction::make()
+                ->label('Export Booking')
+                ->icon('heroicon-o-document')
+                ->color('success')
+                ->exporter(BookingExporter::class)
+                ->fileDisk('local')
+                ->formats([
+                    ExportFormat::Xlsx,
+                ]),
                     Tables\Actions\BulkAction::make('Received Payment')
                     ->label('Received Payment')
                     ->color('warning')
