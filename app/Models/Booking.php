@@ -108,6 +108,9 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
     
-    
+    public function scopeSearchinvoice($query, $search)
+    {
+        return $query->where('id', $search)->first();
+    }
 
 }
