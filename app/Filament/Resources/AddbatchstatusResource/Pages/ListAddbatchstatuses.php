@@ -10,10 +10,5 @@ class ListAddbatchstatuses extends ListRecords
 {
     protected static string $resource = AddbatchstatusResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\CreateAction::make(),
-        ];
-    }
+    
 }
