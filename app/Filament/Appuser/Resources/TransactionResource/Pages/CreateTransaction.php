@@ -17,4 +17,6 @@ class CreateTransaction extends CreateRecord
        
         return SenderResource::getUrl('edit', ['record' => $this->data['sender_id']]);
     }
+
+    
 }
