@@ -20,4 +20,10 @@ class Batch extends Model
         return $query->where('is_active', 1)->get()->pluck('batchno', 'id');
         
     }
+
+    public function scopeCurrentyear($query)
+    {
+        return $query->where('batch_year', date('Y'))->get()->pluck('batchno', 'id');
+        
+    }
 }

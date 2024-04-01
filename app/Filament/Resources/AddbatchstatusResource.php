@@ -14,6 +14,7 @@ use App\Models\Addbatchstatus;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TagsColumn;
+use Filament\Notifications\Notification;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,7 +27,9 @@ class AddbatchstatusResource extends Resource
 {
     protected static ?string $model = Addbatchstatus::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Batch Status';
+    protected static ?string $navigationLabel = 'Add Batch Status';
+    public static ?string $label = 'Create Batch Status';
 
     public static function form(Form $form): Form
     {
@@ -80,21 +83,20 @@ class AddbatchstatusResource extends Resource
             ->filters([
                 SelectFilter::make('batch_id')
                     ->multiple()
-                    ->options(Batch::all()->where('is_active', true)->pluck('batchno', 'id'))
+                    ->options(Batch::Currentyear())
                     ->label('Batch Number')
                     ->default(array('Select Batch Number')),
 
             ], layout: FiltersLayout::AboveContent)
             ->actions([
-                Tables\Actions\EditAction::make(),
+               
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\BulkAction::make('Add Invoice Status')
-                    ->icon('heroicon-o-arrow-path')
-                    ->color('primary')
-                    ->form([
+                        ->icon('heroicon-o-arrow-path')
+                        ->color('primary')
+                        ->form([
                             Section::make()
                                 ->schema([
                                     Forms\Components\Select::make('id')
@@ -111,12 +113,13 @@ class AddbatchstatusResource extends Resource
                                     Forms\Components\TextInput::make('waybill'),
                                     Forms\Components\Textarea::make('remarks')
                                 ])
-                              
+
                         ])->action(function (Collection $records, array $data): void {
                             foreach ($records as $record) {
                                 $statusupdate = InvoiceStatus::where('booking_id', $record->id)
                                     ->where('trackstatus_id', $data['id'])
                                     ->count();
+                                  $flagcount = 0;  
                                 if ($statusupdate == 0) {
                                     Invoicestatus::create([
                                         'generated_invoice' => $record->booking_invoice,
@@ -135,7 +138,19 @@ class AddbatchstatusResource extends Resource
                                         'location' => $data['location'],
                                         'waybill' => $data['waybill'],
                                     ]);
+                                    $flagcount = 1;
                                 }
+                            }
+                            if($flagcount == 1){
+                                Notification::make()
+                                ->title('Batch Status Successfully Created')
+                                ->success()
+                                ->send();
+                            } else {
+                                Notification::make()
+                                        ->title('Batch Status Already Created')
+                                        ->success()
+                                        ->send();
                             }
                         })
                 ]),
