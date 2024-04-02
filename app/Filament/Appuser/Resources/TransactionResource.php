@@ -292,6 +292,7 @@ class TransactionResource extends Resource
                             'total_price'
                         )->prefix('$')
                             ->label('Total Price')
+                            ->readOnly()
                             ->numeric()
                             ->columnSpanFull(),
                     ])->columns(3)
