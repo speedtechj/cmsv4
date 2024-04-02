@@ -522,6 +522,7 @@ class BookingRelationManager extends RelationManager
             Forms\Components\TextInput::make(
                 'total_price'
             )->prefix('$')
+                ->readOnly()
                 ->label('Total Price')
                 ->numeric()
                 ->columnSpanFull(),
