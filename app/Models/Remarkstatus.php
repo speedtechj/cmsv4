@@ -10,11 +10,8 @@ class Remarkstatus extends Model
     use HasFactory;
     protected $guarded = [];
     protected $casts = [
-       
         'invoicedoc' => 'array',
-        'assign_to' => 'array',
-       
-        
+        'assign_to' => 'array', 
     ];
     const STATUS = [
         'Open' => 'Open',
@@ -49,8 +46,8 @@ class Remarkstatus extends Model
     {
         return $this->belongsTo(User::class, 'assign_to');
     }
-    // public function searchinvoice()
-    // {
-    //     return $this->belongsTo(Searchinvoice::class, 'booking_id');
-    // }
+    public function searchinvoice()
+    {
+        return $this->belongsTo(Searchinvoice::class, 'booking_id');
+    }
 }

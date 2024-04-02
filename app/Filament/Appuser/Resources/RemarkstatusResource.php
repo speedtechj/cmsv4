@@ -147,9 +147,8 @@ class RemarkstatusResource extends Resource
                 Tables\Columns\TextColumn::make('statuscategory.description')->label('Task Title'),
                 Tables\Columns\TextColumn::make('assignby.full_name')
                 ->label('Assigned By'),
-                Tables\Columns\TextColumn::make('assignto.full_name')
-                ->label('Assigned To'),
-                    
+                Tables\Columns\TextColumn::make('assignto')
+                ->label('Assigned To'),    
                 Tables\Columns\IconColumn::make('is_resolved')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('status'),
