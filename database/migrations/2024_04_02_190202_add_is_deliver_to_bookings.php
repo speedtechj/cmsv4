@@ -15,7 +15,7 @@ return new class extends Migration
             $table->boolean('is_deliver')
             ->after('note')->default(false);
             $table->boolean('is_active')
-            ->after('is_deliver')->default(false);
+            ->after('is_deliver')->default(true);
         });
     }
 
