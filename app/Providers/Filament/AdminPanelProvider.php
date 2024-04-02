@@ -29,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('/admin')
             ->spa()
+            ->login()
             ->brandName('Forex CMSv4')
             ->profile(EditProfile::class)
             ->colors([
