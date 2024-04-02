@@ -89,6 +89,7 @@ class RemarkstatusResource extends Resource
                                 ->required()
                                 ->disabledOn('edit'),
                             Forms\Components\Select::make('assign_to')
+                                ->multiple()
                                 ->options(User::where('branch_id', '!=', auth()->user()->branch_id)->pluck('full_name', 'id'))
                                 ->required()
                                 ->hiddenOn('edit'),
@@ -113,7 +114,6 @@ class RemarkstatusResource extends Resource
                                 ->label('Receiver Remarks/Comments')
                                 ->maxLength(65535)
                                 ->disabledOn('create'),
-                           
                             FileUpload::make('invoicedoc')
                                 ->label('Document Attachements')
                                 ->multiple()
@@ -147,8 +147,6 @@ class RemarkstatusResource extends Resource
                 Tables\Columns\TextColumn::make('statuscategory.description')->label('Task Title'),
                 Tables\Columns\TextColumn::make('assignby.full_name')
                 ->label('Assigned By'),
-                Tables\Columns\TextColumn::make('assignto')
-                ->label('Assigned To'),    
                 Tables\Columns\IconColumn::make('is_resolved')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('status'),

@@ -94,4 +94,7 @@ class User extends Authenticatable implements FilamentUser, HasName
     // public function batch(){
     //     return $this->hasMany(Batch::class);
     // }
+    // public function remarkstatus(){
+    //     return $this->hasMany(Remarkstatus::class);
+    // }
 }
