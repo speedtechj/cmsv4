@@ -25,6 +25,7 @@ use App\Models\Catextracharge;
 use App\Services\PriceService;
 use Filament\Facades\Filament;
 use App\Models\Receiveraddress;
+use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
@@ -134,9 +135,9 @@ class BookingRelationManager extends RelationManager
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
-            ])
+            ])->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                Filter::make('is_paid')->label('Is Paid')->query(fn (Builder $query): Builder => $query->where('is_paid', false))->default(),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
