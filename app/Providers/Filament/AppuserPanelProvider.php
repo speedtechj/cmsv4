@@ -32,6 +32,7 @@ class AppuserPanelProvider extends PanelProvider {
         ->brandName('Forex CMSv4')
         ->profile(EditProfile::class )
         ->login()
+        ->readOnlyRelationManagersOnResourceViewPagesByDefault(false)
         ->colors( [
             'primary' => Color::Amber,
         ] )
