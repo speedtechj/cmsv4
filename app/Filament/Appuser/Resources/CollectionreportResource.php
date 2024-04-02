@@ -136,7 +136,7 @@ class CollectionreportResource extends Resource
         return [
             'index' => Pages\ListCollectionreports::route('/'),
             'create' => Pages\CreateCollectionreport::route('/create'),
-            'edit' => Pages\EditCollectionreport::route('/{record}/edit'),
+            // 'edit' => Pages\EditCollectionreport::route('/{record}/edit'),
         ];
     }
 }
