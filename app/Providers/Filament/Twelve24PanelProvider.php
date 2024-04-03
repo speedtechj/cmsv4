@@ -8,6 +8,7 @@ use Filament\Widgets;
 use Filament\PanelProvider;
 use Filament\Navigation\MenuItem;
 use Filament\Support\Colors\Color;
+use App\Filament\Pages\Auth\EditProfile;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -29,6 +30,7 @@ class Twelve24PanelProvider extends PanelProvider
             ->databaseNotifications()
             ->brandName('12:24 Cargo Express')
             ->login()
+            ->profile(EditProfile::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -39,8 +41,7 @@ class Twelve24PanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Twelve24/Widgets'), for: 'App\\Filament\\Twelve24\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -55,7 +56,14 @@ class Twelve24PanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->userMenuItems( [
+                MenuItem::make()
+                ->label( 'Admin Acount' )
+                ->icon( 'heroicon-o-user' )
+                ->url( '/admin' )
+                ->visible( fn (): bool => auth()->user()->isAdmin() )
+            ] );
             
             
     }

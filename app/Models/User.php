@@ -18,7 +18,7 @@ class User extends Authenticatable implements FilamentUser, HasName
     use HasApiTokens, HasFactory, Notifiable;
     use HasRoles;
     use HasPanelShield;
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -54,40 +54,46 @@ class User extends Authenticatable implements FilamentUser, HasName
     }
     public function canAccessPanel(Panel $panel): bool
     {
-      
         $user_role = auth()->user()->getRoleNames();
-       
-        if($panel->getId() === 'admin' && $user_role->contains('super_admin')) {
-            return str_ends_with($this->is_active, 1);
-        }
-        else if($panel->getId() ==='app'){
-           
-            return str_ends_with($this->is_active, 1);
-        }
-        else if($panel->getId() ==='appuser' ){
-           
-            return str_ends_with($this->is_active, 1);
 
-        }else if($panel->getId() ==='twelve24'  && $user_role->contains('super_admin') || $user_role->contains('1224')){
+        if ($panel->getId() === 'admin' && $user_role->contains('super_admin')) {
+
             return str_ends_with($this->is_active, 1);
-        }else {
+        } else if ($panel->getId() === 'appuser') {
+
+            if ($user_role->contains('super_admin') || $user_role->contains('Encoder')) {
+                return str_ends_with($this->is_active, 1);
+            } else {
+                return false;
+            }
+        } else if ($panel->getId() === 'twelve24') {
+            if ($user_role->contains('super_admin') || $user_role->contains('1224')) {
+                return str_ends_with($this->is_active, 1);
+            } else {
+                return false;
+            }
+        } else {
+
             return false;
         }
-       
-       
+
+
     }
     public function isAdmin(): bool
     {
         return auth()->user()->getRoleNames()->contains('super_admin');
-        
+
     }
-    public function branch(){
+    public function branch()
+    {
         return $this->belongsTo(Branch::class);
     }
-    public function citycan(){
+    public function citycan()
+    {
         return $this->belongsTo(Citycan::class);
     }
-    public function provincecan(){
+    public function provincecan()
+    {
         return $this->belongsTo(Provincecan::class);
     }
     // public function sender(){

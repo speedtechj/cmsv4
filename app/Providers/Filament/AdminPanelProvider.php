@@ -30,6 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->spa()
             ->login()
+            ->databaseNotifications()
             ->brandName('Forex CMSv4')
             ->profile(EditProfile::class)
             ->colors([
@@ -64,7 +65,11 @@ class AdminPanelProvider extends PanelProvider
                 MenuItem::make()
                 ->label('Dashboard')
                 ->icon('heroicon-o-user')
-                ->url('/')
+                ->url('/'),
+                MenuItem::make()
+                ->label('1224')
+                ->icon('heroicon-o-user')
+                ->url('/1224')
             ])
             ->navigationGroups( [
                 NavigationGroup::make( 'Batch Status' )->icon('heroicon-o-document-check'),
