@@ -107,6 +107,9 @@ class ManifestResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     ExportBulkAction::make()
+                    ->label('Export Manifest')
+                    ->icon('heroicon-o-folder-arrow-down')
+                    ->color('primary')
                     ->exporter(ManifestExporter::class)
                     ->fileName(fn (Export $export): string => "Manifest.xlsx")
                 ]),
