@@ -64,11 +64,13 @@ class User extends Authenticatable implements FilamentUser, HasName
            
             return str_ends_with($this->is_active, 1);
         }
-        else if($panel->getId() ==='appuser'){
+        else if($panel->getId() ==='appuser' ){
            
             return str_ends_with($this->is_active, 1);
-        }
-        else {
+
+        }else if($panel->getId() ==='twelve24'  && $user_role->contains('super_admin') || $user_role->contains('1224')){
+            return str_ends_with($this->is_active, 1);
+        }else {
             return false;
         }
        

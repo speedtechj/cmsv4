@@ -2,38 +2,42 @@
 
 namespace App\Providers\Filament;
 
-use Filament\Http\Middleware\Authenticate;
-use Filament\Http\Middleware\DisableBladeIconComponents;
-use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
 use Filament\Panel;
-use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
 use Filament\Widgets;
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Filament\PanelProvider;
+use Filament\Navigation\MenuItem;
+use Filament\Support\Colors\Color;
+use Filament\Http\Middleware\Authenticate;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
-use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 
-class 1224PanelProvider extends PanelProvider
+class Twelve24PanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('1224')
+            ->id('twelve24')
             ->path('1224')
+            ->databaseNotifications()
+            ->brandName('12:24 Cargo Express')
+            ->login()
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Filament/1224/Resources'), for: 'App\\Filament\\1224\\Resources')
-            ->discoverPages(in: app_path('Filament/1224/Pages'), for: 'App\\Filament\\1224\\Pages')
+            ->discoverResources(in: app_path('Filament/Twelve24/Resources'), for: 'App\\Filament\\Twelve24\\Resources')
+            ->discoverPages(in: app_path('Filament/Twelve24/Pages'), for: 'App\\Filament\\Twelve24\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/1224/Widgets'), for: 'App\\Filament\\1224\\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Twelve24/Widgets'), for: 'App\\Filament\\Twelve24\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
@@ -52,5 +56,7 @@ class 1224PanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
+            
+            
     }
 }

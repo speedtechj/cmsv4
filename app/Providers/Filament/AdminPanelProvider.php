@@ -27,7 +27,7 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->id('admin')
-            ->path('/admin')
+            ->path('admin')
             ->spa()
             ->login()
             ->brandName('Forex CMSv4')
