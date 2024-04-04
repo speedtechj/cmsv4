@@ -2,19 +2,26 @@
 
 namespace App\Filament\Twelve24\Resources;
 
-use App\Filament\Appuser\Resources\SearchinvoiceResource\RelationManagers\InvattachRelationManager;
-use App\Filament\Appuser\Resources\SearchinvoiceResource\RelationManagers\InvoicestatusRelationManager;
+use Filament\Forms;
+use Filament\Tables;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use App\Models\Searchinvoice;
+use Filament\Infolists\Infolist;
+use Filament\Resources\Resource;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use App\Filament\Appuser\Resources\SenderResource;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Appuser\Resources\ReceiverResource;
+use App\Filament\Appuser\Resources\SenderaddressResource;
 use App\Filament\Twelve24\Resources\SearchinvoiceResource\Pages;
 use App\Filament\Twelve24\Resources\SearchinvoiceResource\RelationManagers;
+use App\Filament\Appuser\Resources\SearchinvoiceResource\RelationManagers\InvattachRelationManager;
+use App\Filament\Appuser\Resources\SearchinvoiceResource\RelationManagers\InvoicestatusRelationManager;
 use App\Filament\Twelve24\Resources\SearchinvoiceResource\RelationManagers\RemarkstatusRelationManager;
-use App\Models\Searchinvoice;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SearchinvoiceResource extends Resource
 {
@@ -57,7 +64,7 @@ class SearchinvoiceResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -79,8 +86,51 @@ class SearchinvoiceResource extends Resource
     {
         return [
             'index' => Pages\ListSearchinvoices::route('/'),
-            'create' => Pages\CreateSearchinvoice::route('/create'),
-            'edit' => Pages\EditSearchinvoice::route('/{record}/edit'),
+            // 'create' => Pages\CreateSearchinvoice::route('/create'),
+            'view' => Pages\Viewsearchinvoice::route('/{record}'),
         ];
+    }
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make('Sender Details')
+                    ->columns(5)
+                    ->schema([
+                        TextEntry::make('sender.full_name')
+                            ->label('Name'),
+                           
+                        TextEntry::make('senderaddress.address'),
+                            
+                        TextEntry::make('senderaddress.provincecan.name')
+                            ->label('Province'),
+                        TextEntry::make('senderaddress.citycan.name')
+                            ->label('City'),
+                        TextEntry::make('senderaddress.postal_code')
+                            ->label('Postal Code'),
+                            TextEntry::make('sender.mobile_no')
+                            ->label('Mobile Number'),
+                        TextEntry::make('sender.email')
+                            ->label('Email'),
+                    ]),
+                Section::make('Receiver Details')
+                    ->columns(4)
+                    ->schema([
+                        TextEntry::make('receiver.full_name')
+                            ->label('Name'),
+                         
+                        TextEntry::make('receiveraddress.address')
+                            ->label('Address'),
+                        TextEntry::make('receiveraddress.provincephil.name')
+                            ->label('Province'),
+                        TextEntry::make('receiveraddress.cityphil.name')
+                            ->label('City'),
+                        TextEntry::make('receiveraddress.barangayphil.name')
+                            ->label('Barangay'),
+                            TextEntry::make('receiver.mobile_no')
+                            ->label('Mobile Number'),
+                    ]),
+                
+            ]);
     }
 }

@@ -42,6 +42,7 @@ use App\Filament\Appuser\Resources\BookingResource;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Appuser\Resources\TransactionResource;
 use Filament\Resources\RelationManagers\RelationManager;
+use App\Filament\Appuser\Resources\SearchinvoiceResource;
 
 class BookingRelationManager extends RelationManager
 {
@@ -68,7 +69,8 @@ class BookingRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('booking_invoice')
                     ->label('Invoice')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->url(fn (Model $record) => SearchinvoiceResource::getUrl('view', ['record' => $record->id])),
                 Tables\Columns\TextColumn::make('manual_invoice')
                     ->label('Manual Invoice')
                     ->sortable()

@@ -30,6 +30,7 @@ class Twelve24PanelProvider extends PanelProvider
             ->databaseNotifications()
             ->brandName('12:24 Cargo Express')
             ->login()
+            ->readOnlyRelationManagersOnResourceViewPagesByDefault(false)
             ->profile(EditProfile::class)
             ->colors([
                 'primary' => Color::Amber,

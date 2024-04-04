@@ -15,8 +15,9 @@ use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Notifications\Actions\Action;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Appuser\Resources\RemarkstatusResource;
 use Filament\Resources\RelationManagers\RelationManager;
-use App\Filament\Twelve24\Resources\SearchinvoiceResource;
+use App\Filament\Appuser\Resources\SearchinvoiceResource;
 
 class RemarkstatusRelationManager extends RelationManager
 {
@@ -136,7 +137,7 @@ class RemarkstatusRelationManager extends RelationManager
                                 ->actions([
                                     Action::make('Reply')
                                         ->button()
-                                        ->url(SearchinvoiceResource::getUrl('edit', ['record' => $record->booking_id])),
+                                        ->url(RemarkstatusResource::getUrl('edit', ['record' => $record->booking_id])),
 
                                 ])
                                 ->sendToDatabase(User::where('id', $recipients)->first());
@@ -160,11 +161,11 @@ class RemarkstatusRelationManager extends RelationManager
                                 ->body($record->statuscategory->description . '<br>' . ' Resolved by' . ' ' . auth()->user()->full_name)
                                 ->icon('heroicon-o-check-circle')
                                 ->iconColor('success')
-                                ->actions([
-                                    Action::make('View Reply')
-                                        ->button()
-                                        ->url(SearchinvoiceResource::getUrl('edit', ['record' => $record->booking_id])),
-                                ])
+                                // ->actions([
+                                //     Action::make('View Reply')
+                                //         ->button()
+                                //         ->url(SearchinvoiceResource::getUrl('view', ['record' => $record->booking_id])),
+                                // ])
                                 ->sendToDatabase(User::where('id', $recipients)->first());
                         }
 
