@@ -70,6 +70,7 @@ class BookingRelationManager extends RelationManager
                     ->label('Invoice')
                     ->sortable()
                     ->searchable()
+                    ->color('primary')
                     ->url(fn (Model $record) => SearchinvoiceResource::getUrl('view', ['record' => $record->id])),
                 Tables\Columns\TextColumn::make('manual_invoice')
                     ->label('Manual Invoice')
@@ -122,6 +123,7 @@ class BookingRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('refund_amount')->label('Refund')
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('agent.full_name')->label('Agent')
+                ->color('danger')
                 ->url(fn (Model $record) => AgentResource::getUrl('edit', ['record' => $record->agent_id ?? 0])),
                 // ->url(fn (Model $record) => AgentResource::getUrl('edit', $record->agent)),
                 Tables\Columns\IconColumn::make('agent.agent_type')->label('In-House Agent')->boolean()->toggleable(),
