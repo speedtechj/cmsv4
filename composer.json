@@ -22,7 +22,6 @@
         "milon/barcode": "^11.0"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.12",
         "fakerphp/faker": "^1.9.1",
         "laradumps/laradumps": "^3.0",
         "laravel/pint": "^1.0",

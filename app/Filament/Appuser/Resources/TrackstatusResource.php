@@ -19,7 +19,7 @@ class TrackstatusResource extends Resource
 {
     protected static ?string $model = Trackstatus::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
 
     public static function form(Form $form): Form
     {
