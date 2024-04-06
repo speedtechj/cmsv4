@@ -29,6 +29,7 @@ class AppuserPanelProvider extends PanelProvider {
         ->id('appuser')
         ->path( '/' )
         ->spa()
+        ->sidebarFullyCollapsibleOnDesktop()
         ->maxContentWidth(MaxWidth::Full)
         ->databaseNotifications()
         ->brandName('Forex CMSv4')
