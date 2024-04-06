@@ -153,10 +153,12 @@ class ReceiverRelationManager extends RelationManager
                             $set('barangayphil_id', null);
                         }),
                     Forms\Components\Select::make('barangayphil_id')
+                        ->label('Barangay')
                         ->searchable()
                         ->preload()
                         ->reactive()
                         ->required()
+                        ->relationship('cityphil', 'id')
                         ->options(function (callable $get) {
                             $city = Cityphil::find($get('cityphil_id'));
     
