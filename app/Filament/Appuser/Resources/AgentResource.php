@@ -102,6 +102,7 @@ class AgentResource extends Resource
     {
         return $table
         ->paginated([10])
+        ->defaultPaginationPageOption(10)
         ->deferLoading()
             ->columns([
                 Tables\Columns\TextColumn::make('first_name')
