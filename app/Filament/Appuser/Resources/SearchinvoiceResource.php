@@ -58,7 +58,9 @@ class SearchinvoiceResource extends Resource
                 Tables\Columns\TextColumn::make('receiver.mobile_no')
                 ->label('Receiver Number')
                 ->searchable(isIndividual: true, isGlobal: false),
-            ])
+            ])->searchOnBlur()
+            ->persistSearchInSession()
+        ->persistColumnSearchesInSession()
             ->filters([
                 //
             ])
@@ -68,7 +70,7 @@ class SearchinvoiceResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

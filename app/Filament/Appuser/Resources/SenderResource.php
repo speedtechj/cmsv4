@@ -99,7 +99,9 @@ class SenderResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->dateTime(),
-            ])
+            ])->searchOnBlur()
+            ->persistSearchInSession()
+        ->persistColumnSearchesInSession()
             ->filters([
                 //
             ])
