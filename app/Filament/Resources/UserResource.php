@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Provincecan;
 use Filament\Resources\Resource;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
@@ -184,6 +185,7 @@ class UserResource extends Resource
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
+               
             ])
             ->filters([
                 //

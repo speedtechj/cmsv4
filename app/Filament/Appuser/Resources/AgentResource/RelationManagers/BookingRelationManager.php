@@ -116,11 +116,14 @@ class BookingRelationManager extends RelationManager
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('agent.agent_type')->label('In-House Agent')->boolean()
                     ->toggleable(isToggledHiddenByDefault: true),
+                    Tables\Columns\IconColumn::make('is_pickup')
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('notes')->label('Notes'),
+                
 
             ])
             ->filters([
-                Filter::make('is_paid')->query(fn(Builder $query): Builder => $query->where('is_paid', false))->default(),
+                Filter::make('is_pickup')->query(fn(Builder $query): Builder => $query->where('is_pickup', false))->default(),
                 Filter::make('booking_date')->label('Pickup Date')
                     ->form([
                         Section::make('Pickup Date')
