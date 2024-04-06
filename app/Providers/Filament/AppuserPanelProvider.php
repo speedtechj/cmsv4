@@ -8,6 +8,7 @@ use Filament\Widgets;
 use Filament\PanelProvider;
 use Filament\Navigation\MenuItem;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\MaxWidth;
 use App\Filament\Pages\Auth\EditProfile;
 use Filament\Navigation\NavigationGroup;
 use Filament\Http\Middleware\Authenticate;
@@ -28,6 +29,7 @@ class AppuserPanelProvider extends PanelProvider {
         ->id('appuser')
         ->path( '/' )
         ->spa()
+        ->maxContentWidth(MaxWidth::Full)
         ->databaseNotifications()
         ->brandName('Forex CMSv4')
         ->profile(EditProfile::class )
