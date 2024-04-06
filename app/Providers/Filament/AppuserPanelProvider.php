@@ -25,7 +25,7 @@ class AppuserPanelProvider extends PanelProvider {
     public function panel( Panel $panel ): Panel {
         return $panel
         ->default()
-        ->id( 'appuser' )
+        ->id('appuser')
         ->path( '/' )
         ->spa()
         ->databaseNotifications()

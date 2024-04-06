@@ -4,10 +4,13 @@ namespace App\Filament\Twelve24\Resources\RemarkstatusResource\Pages;
 
 use App\Models\User;
 use Filament\Actions;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Filament\Notifications\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
-use App\Filament\Twelve24\Resources\RemarkstatusResource;
+use App\Filament\Appuser\Resources\RemarkstatusResource;
+
+
 
 class CreateRemarkstatus extends CreateRecord
 {
@@ -41,7 +44,8 @@ class CreateRemarkstatus extends CreateRecord
        ->iconColor('success')
        ->actions([
             Action::make('Reply')
-            ->url($this->getResource()::getUrl('edit', ['record' => $this->record]))
+            // ->url(RemarkstatusResource::getUrl('edit', ['record' => $this->record]))
+            ->url(fn (Model $record) => route('filament.resources.senders.edit', $record->id))
        ])
        ->sendToDatabase(User::where('id', $recipients)->first());
     }
