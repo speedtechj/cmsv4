@@ -585,7 +585,7 @@ class BookingRelationManager extends RelationManager
                 ->closeOnDateSelection(),
             Forms\Components\TextInput::make('reference_number')->label('Authorization Code/Reference Number/Cheque Number')
                 ->disabled(
-                    fn(Get $get): bool => $get('type_of_payment') == 4
+                    fn(Get $get): bool => $get('type_of_payment') == 1
                 ),
 
             Forms\Components\TextInput::make('Amount')->label('Payment Amount')
@@ -611,7 +611,7 @@ class BookingRelationManager extends RelationManager
                 ->closeOnDateSelection(),
             TextInput::make('reference_number')->label('Authorization Code/Reference Number/Cheque Number')
                 ->disabled(
-                    fn(Get $get): bool => $get('type_of_payment') == 4
+                    fn(Get $get): bool => $get('type_of_payment') == 1
                 ),
         ];
     }
