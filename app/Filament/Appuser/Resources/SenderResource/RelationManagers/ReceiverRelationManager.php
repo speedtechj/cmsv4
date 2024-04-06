@@ -181,7 +181,7 @@ class ReceiverRelationManager extends RelationManager
                                 'cityphil_id' => $get('cityphil_id'),
                                 'name' => $data['name'],
                             ]);
-                        }),
+                        })->createOptionModalHeading('Create Barangay'),
                     Forms\Components\TextInput::make('zip_code')
                         ->maxLength(255),
                     ])
