@@ -5,10 +5,13 @@ namespace App\Filament\Appuser\Resources\SenderResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use App\Models\Cityphil;
 use App\Models\Receiver;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\Barangayphil;
 use App\Models\Provincephil;
 use App\Models\Receiveraddress;
 use Filament\Forms\Components\Section;
@@ -158,7 +161,7 @@ class ReceiverRelationManager extends RelationManager
                         ->preload()
                         ->reactive()
                         ->required()
-                        ->relationship('cityphil', 'id')
+                        // ->relationship('cityphil', 'id')
                         ->options(function (callable $get) {
                             $city = Cityphil::find($get('cityphil_id'));
     
@@ -168,7 +171,17 @@ class ReceiverRelationManager extends RelationManager
                              }
                              return $city->barangayphil->pluck('name', 'id');
     
-                         }),
+                         })->createOptionForm([
+
+                            Forms\Components\TextInput::make('name')
+                                ->required()
+                                ->maxLength(255),
+                         ])->createOptionUsing(function (array $data, Get $get, Set $set) {
+                            Barangayphil::create([
+                                'cityphil_id' => $get('cityphil_id'),
+                                'name' => $data['name'],
+                            ]);
+                        }),
                     Forms\Components\TextInput::make('zip_code')
                         ->maxLength(255),
                     ])
