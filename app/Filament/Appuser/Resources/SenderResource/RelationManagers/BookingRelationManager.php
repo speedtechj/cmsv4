@@ -87,48 +87,53 @@ class BookingRelationManager extends RelationManager
                         }
 
                         return 'info';
-                    }),
+                    })
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('boxtype.description'),
                 Tables\Columns\TextColumn::make('batch.id')
                     ->label('Batch Number')
                     ->sortable()
                     ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->getStateUsing(function (Model $record) {
                         return $record->batch->batchno . " " . $record->batch->batch_year;
                     }),
                 Tables\Columns\IconColumn::make('is_pickup')
                     ->label('Is Pickup')
                     ->boolean()
-                    ->toggleable(),
-                Tables\Columns\TextColumn::make('zone.description')->toggleable(),
-                Tables\Columns\TextColumn::make('booking_date')->label('Pickup/Dropoff Date'),
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('zone.description')->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('booking_date')->label('Pickup/Dropoff Date')->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('start_time')->label('Pickup Time')
                     ->getStateUsing(function (Model $record) {
                         return $record->start_time . " - " . $record->end_time;
-                    }),
-                Tables\Columns\TextColumn::make('dimension')->label('Dimension')->toggleable(),
-                Tables\Columns\TextColumn::make('total_inches')->label('No. of Inches')->toggleable(),
-                Tables\Columns\TextColumn::make('discount.discount_amount')->label('Discount')->money('USD', ),
-                Tables\Columns\TextColumn::make('agentdiscount.discount_amount')->label('Agent Discount')->money('USD', ),
-                Tables\Columns\TextColumn::make('extracharge_amount')->money('USD'),
-                Tables\Columns\TextColumn::make('total_price')->money('USD', ),
-                Tables\Columns\TextColumn::make('payment_date')->datetime()->label('Payment Date')->sortable()->toggleable(),
+                    })->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('dimension')->label('Dimension')->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('total_inches')->label('No. of Inches')->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('discount.discount_amount')->label('Discount')->money('USD', ) ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('agentdiscount.discount_amount')->label('Agent Discount')->money('USD', ) ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('extracharge_amount')->money('USD') ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('total_price')->money('USD', ) ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('payment_date')->datetime()->label('Payment Date')->sortable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('is_paid')
                     ->label('Paid')
                     ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle'),
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 // ToggleColumn::make('is_padi'),
-                Tables\Columns\TextColumn::make('payment_balance')->label('Balance')->money('USD'),
+                Tables\Columns\TextColumn::make('payment_balance')->label('Balance')->money('USD') ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('refund_amount')->label('Refund')
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('agent.full_name')->label('Agent')
+                ->toggleable(isToggledHiddenByDefault: true)
                 ->color('danger')
                 ->url(fn (Model $record) => AgentResource::getUrl('edit', ['record' => $record->agent_id ?? 0])),
                 // ->url(fn (Model $record) => AgentResource::getUrl('edit', $record->agent)),
-                Tables\Columns\IconColumn::make('agent.agent_type')->label('In-House Agent')->boolean()->toggleable(),
+                Tables\Columns\IconColumn::make('agent.agent_type')->label('In-House Agent')->boolean()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('note')->label('Notes')
-                    ->toggleable(),
+                ->lineClamp(2)
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('user.id')
                     ->label('Encoder')
                     ->searchable()
@@ -136,9 +141,8 @@ class BookingRelationManager extends RelationManager
                     ->getStateUsing(function (Model $record) {
                         return $record->user->first_name . " " . $record->user->last_name;
                     })
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
+                    
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])->defaultSort('created_at', 'desc')
             ->filters([
                 Filter::make('is_paid')->label('Is Paid')->query(fn (Builder $query): Builder => $query->where('is_paid', false))->default(),
@@ -178,6 +182,7 @@ class BookingRelationManager extends RelationManager
 
             ])
             ->actions([
+                ActionGroup::make([
                 Tables\Actions\EditAction::make()
                     ->mutateFormDataUsing(function (array $data): array {
                         $data['user_id'] = auth()->id();
@@ -201,7 +206,7 @@ class BookingRelationManager extends RelationManager
                         return $data;
                     }),
                 Tables\Actions\DeleteAction::make(),
-                ActionGroup::make([
+              
                     Tables\Actions\Action::make('Payment')
                         ->hidden(fn(Booking $record): bool => $record['payment_balance'] == 0)
                         ->model(Bookingpayment::class)
