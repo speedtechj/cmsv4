@@ -2,6 +2,7 @@
 
 namespace App\Filament\Appuser\Resources;
 
+use App\Filament\Appuser\Resources\CityphilResource\RelationManagers\BarangayphilRelationManager;
 use Filament\Forms;
 use App\Models\Zone;
 use Filament\Tables;
@@ -78,7 +79,7 @@ class CityphilResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            BarangayphilRelationManager::class,
         ];
     }
 
