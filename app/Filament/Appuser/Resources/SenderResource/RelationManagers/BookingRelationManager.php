@@ -144,6 +144,9 @@ class BookingRelationManager extends RelationManager
                     
                     ->toggleable(isToggledHiddenByDefault: true),
             ])->defaultSort('created_at', 'desc')
+            ->searchOnBlur()
+            ->persistSearchInSession()
+        ->persistColumnSearchesInSession()
             ->filters([
                 Filter::make('is_paid')->label('Is Paid')->query(fn (Builder $query): Builder => $query->where('is_paid', false))->default(),
             ])
