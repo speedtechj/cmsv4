@@ -260,7 +260,7 @@
 
         </tr>
         <tr>
-            <td  ><span class="span-text">House/Unit/Apt Number/Street Name</span><br>
+            <td colspan="2" ><span class="span-text">House/Unit/Apt Number/Street Name</span><br>
                 {{ $record->receiveraddress->address }}</td>
             <td ><span class="span-text">Barangay </span><br>
                 {{ $record->receiveraddress->barangayphil->name }}</td>
