@@ -44,8 +44,8 @@ class SenderResource extends Resource
                 Forms\Components\TextInput::make('mobile_no')
                 ->live(onBlur:true)
                     ->unique(ignorable: fn($record) => $record)
-                    ->mask('+1(999)999-9999')
-                    ->stripCharacters([',','+','(',')','-','1'])
+                    ->mask('(999)999-9999')
+                    ->stripCharacters(['(',')','-'])
                     ->required(),
                     
                 Forms\Components\TextInput::make('home_no')
