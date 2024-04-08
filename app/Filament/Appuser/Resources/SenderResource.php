@@ -49,8 +49,8 @@ class SenderResource extends Resource
                     ->required(),
                     
                 Forms\Components\TextInput::make('home_no')
-                    ->mask('+1(999)999-9999')
-                    ->stripCharacters([',','+','(',')','-','1']),
+                    ->mask('(999)999-9999')
+                    ->stripCharacters(['(',')','-']),
                 Forms\Components\TextInput::make('email')
                     ->unique(ignorable: fn($record) => $record)
                     ->email()
