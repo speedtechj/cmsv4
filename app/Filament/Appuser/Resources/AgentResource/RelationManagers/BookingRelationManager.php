@@ -116,8 +116,6 @@ class BookingRelationManager extends RelationManager
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('agent.agent_type')->label('In-House Agent')->boolean()
                     ->toggleable(isToggledHiddenByDefault: true),
-                    Tables\Columns\IconColumn::make('is_pickup')
-                    ->boolean(),
                 Tables\Columns\TextColumn::make('notes')->label('Notes'),
                 
 
