@@ -262,9 +262,9 @@
         <tr>
             <td colspan="2" width="20%"><span class="span-text">House/Unit/Apt Number/Street Name</span><br>
                 {{ $record->receiveraddress->address }}</td>
-            <td width="30%"><span class="span-text">Barangay </span><br>
+            <td ><span class="span-text">Barangay </span><br>
                 {{ $record->receiveraddress->barangayphil->name }}</td>
-            <td width="35%" align="right"><span class="span-text">Phone Number</span><br>
+            <td  align="right"><span class="span-text">Phone Number</span><br>
                 {{ $record->receiver->home_no }}</td>
 
         </tr>
