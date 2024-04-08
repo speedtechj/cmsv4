@@ -42,10 +42,12 @@ class ReceiverResource extends Resource
                         ->maxLength(255),
                     Forms\Components\TextInput::make('mobile_no')
                     ->mask('+63(9999)999-9999')
+                    ->stripCharacters([',','+','(',')','-','63'])
                         ->required()
                         ->maxLength(255),
                     Forms\Components\TextInput::make('home_no')
                     ->mask('+63(9999)999-9999')
+                    ->stripCharacters([',','+','(',')','-','63'])
                         ->maxLength(255),
                     Forms\Components\TextInput::make('email')
                         ->email()

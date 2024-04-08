@@ -2,12 +2,13 @@
 
 namespace App\Filament\Appuser\Resources;
 
-use App\Filament\Appuser\Resources\SenderResource\RelationManagers\PackinglistRelationManager;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Sender;
-use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 
+use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,7 @@ use App\Filament\Appuser\Resources\SenderResource\Pages;
 use App\Filament\Appuser\Resources\SenderResource\RelationManagers;
 use App\Filament\Appuser\Resources\SenderResource\RelationManagers\BookingRelationManager;
 use App\Filament\Appuser\Resources\SenderResource\RelationManagers\ReceiverRelationManager;
+use App\Filament\Appuser\Resources\SenderResource\RelationManagers\PackinglistRelationManager;
 use App\Filament\Appuser\Resources\SenderResource\RelationManagers\SenderaddressRelationManager;
 use App\Filament\Appuser\Resources\SenderResource\RelationManagers\BookingpaymentRelationManager;
 
@@ -40,11 +42,15 @@ class SenderResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('mobile_no')
+                ->live(onBlur:true)
                     ->unique(ignorable: fn($record) => $record)
                     ->mask('+1(999)999-9999')
+                    ->stripCharacters([',','+','(',')','-','1'])
                     ->required(),
+                    
                 Forms\Components\TextInput::make('home_no')
-                    ->mask('+1(999)999-9999'),
+                    ->mask('+1(999)999-9999')
+                    ->stripCharacters([',','+','(',')','-','1']),
                 Forms\Components\TextInput::make('email')
                     ->unique(ignorable: fn($record) => $record)
                     ->email()
