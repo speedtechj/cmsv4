@@ -255,7 +255,7 @@
                 {{ $record->receiver->first_name }}</td>
             <td colspan="2" width="30%"><span class="span-text">Last Name </span><br>
                 {{ $record->receiver->last_name }}</td>
-            <td align="right"><span class="span-text">Mobile Number</span> <br> {{ $record->receiver->mobile_no }}
+            <td align="right" width="35%"><span class="span-text">Mobile Number</span> <br> {{ $record->receiver->mobile_no }}
             </td>
 
         </tr>
@@ -264,7 +264,7 @@
                 {{ $record->receiveraddress->address }}</td>
             <td width="30%"><span class="span-text">Barangay </span><br>
                 {{ $record->receiveraddress->barangayphil->name }}</td>
-            <td width="25%" align="right"><span class="span-text">Phone Number</span><br>
+            <td width="35%" align="right"><span class="span-text">Phone Number</span><br>
                 {{ $record->receiver->home_no }}</td>
 
         </tr>
