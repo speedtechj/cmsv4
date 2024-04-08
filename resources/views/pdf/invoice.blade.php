@@ -253,9 +253,9 @@
         <tr>
             <td colspan="" width="40%"><span class="span-text">First Name </span><br>
                 {{ $record->receiver->first_name }}</td>
-            <td colspan="2" width="20%"><span class="span-text">Last Name </span><br>
+            <td colspan="2"><span class="span-text">Last Name </span><br>
                 {{ $record->receiver->last_name }}</td>
-            <td align="right"><span class="span-text">Mobile Number</span> <br> {{ $record->receiver->mobile_no }}
+            <td align="right" width="40%"><span class="span-text">Mobile Number</span> <br> {{ $record->receiver->mobile_no }}
             </td>
 
         </tr>
