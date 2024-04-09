@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 use App\Models\Bookingutil;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Toggle;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
