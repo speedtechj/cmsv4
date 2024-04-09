@@ -16,6 +16,7 @@ use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TagsColumn;
 use Filament\Notifications\Notification;
 use Filament\Tables\Enums\FiltersLayout;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -103,7 +104,7 @@ class AddbatchstatusResource extends Resource
                                         ->label('Status')
                                         ->options(Trackstatus::all()->where('branch_id', auth()->user()->branch_id)->pluck('description', 'id'))
                                         ->required(),
-                                    Forms\Components\Datepicker::make('date_updated')
+                                DatePicker::make('date_updated')
                                         ->label('Update Date')
                                         ->native(false)
                                         ->default(now())
