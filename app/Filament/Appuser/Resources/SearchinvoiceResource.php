@@ -138,5 +138,9 @@ class SearchinvoiceResource extends Resource
             // 'edit' => Pages\EditSearchinvoice::route('/{record}/edit'),
         ];
     }
+    public static function getEloquentQuery(): Builder
+{
+    return parent::getEloquentQuery()->where('is_deliver', false);
+}
     
 }
