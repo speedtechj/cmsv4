@@ -150,7 +150,8 @@ class BookingRelationManager extends RelationManager
             ->persistSearchInSession()
         ->persistColumnSearchesInSession()
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\TrashedFilter::make()
+                ->visible( fn (): bool => auth()->user()->isAdmin() ),
                 Filter::make('is_paid')->label('Is Paid')->query(fn (Builder $query): Builder => $query->where('is_paid', false))->default(),
             ])
             ->headerActions([
@@ -227,11 +228,12 @@ class BookingRelationManager extends RelationManager
                         ])
                         ->action(function (Booking $record, array $data): void {
                             if ($record['payment_balance'] != 0) {
+                             
                                 Bookingpayment::create([
                                     'booking_id' => $record->id,
                                     'paymenttype_id' => $data['type_of_payment'],
                                     'payment_date' => $data['payment_date'],
-                                    'reference_number' => $data['reference_number'],
+                                    'reference_number' => $data['reference_number'] ?? null,
                                     'booking_invoice' => $record['booking_invoice'],
                                     'payment_amount' => $data['Amount'],
                                     'user_id' => auth()->id(),
@@ -309,12 +311,11 @@ class BookingRelationManager extends RelationManager
                         ])->action(function (Collection $records, array $data, $action) {
                             $records->each(function ($record) use ($data) {
                                 if ($record->payment_balance != 0) {
-
                                     Bookingpayment::create([
                                         'booking_id' => $record->id,
                                         'paymenttype_id' => $data['type_of_payment'],
                                         'payment_date' => $data['payment_date'],
-                                        'reference_number' => $data['reference_number'],
+                                        'reference_number' => $data['reference_number'] ?? null,
                                         'booking_invoice' => $record->booking_invoice,
                                         'payment_amount' => $record->payment_balance,
                                         'user_id' => auth()->id(),
