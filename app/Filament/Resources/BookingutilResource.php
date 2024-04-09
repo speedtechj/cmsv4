@@ -48,7 +48,7 @@ class BookingutilResource extends Resource
             ->filters([
                 SelectFilter::make('batch_id')
                     ->multiple()
-                    ->options(Batch::Currentyear())
+                    ->options(Batch::all()->pluck('name', 'id'))
                     ->label('Batch Number')
                     ->default(array('Select Batch Number')),
 
