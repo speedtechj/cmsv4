@@ -25,6 +25,7 @@ use App\Models\Catextracharge;
 use App\Services\PriceService;
 use Filament\Facades\Filament;
 use App\Models\Receiveraddress;
+use Tables\Filters\TrashedFilter;
 use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
@@ -43,6 +44,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Appuser\Resources\TransactionResource;
 use Filament\Resources\RelationManagers\RelationManager;
 use App\Filament\Appuser\Resources\SearchinvoiceResource;
+
 
 class BookingRelationManager extends RelationManager
 {
@@ -148,6 +150,7 @@ class BookingRelationManager extends RelationManager
             ->persistSearchInSession()
         ->persistColumnSearchesInSession()
             ->filters([
+                Tables\Filters\TrashedFilter::make(),
                 Filter::make('is_paid')->label('Is Paid')->query(fn (Builder $query): Builder => $query->where('is_paid', false))->default(),
             ])
             ->headerActions([
@@ -186,6 +189,8 @@ class BookingRelationManager extends RelationManager
             ])
             ->actions([
                 ActionGroup::make([
+                    Tables\Actions\ForceDeleteAction::make(),
+                    Tables\Actions\RestoreAction::make(),
                 Tables\Actions\EditAction::make()
                     ->mutateFormDataUsing(function (array $data): array {
                         $data['user_id'] = auth()->id();
@@ -290,6 +295,8 @@ class BookingRelationManager extends RelationManager
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\BulkAction::make('Received Payment')
                         ->label('Received Payment')
@@ -662,4 +669,11 @@ class BookingRelationManager extends RelationManager
 
         ];
     }
+    public static function getEloquentQuery(): Builder
+{
+    return parent::getEloquentQuery()
+        ->withoutGlobalScopes([
+            SoftDeletingScope::class,
+        ]);
+}
 }
