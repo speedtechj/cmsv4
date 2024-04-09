@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Updatebatchstatus extends Model
 {
     use HasFactory;
-    protected $table = 'Invoicestatuses';
+    protected $table = 'invoicestatuses';
     protected $guarded = [];
     public function batch()
     {
