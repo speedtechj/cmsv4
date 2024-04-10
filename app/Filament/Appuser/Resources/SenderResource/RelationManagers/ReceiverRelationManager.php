@@ -105,6 +105,7 @@ class ReceiverRelationManager extends RelationManager
                     }),
             ])
             ->actions([
+                Tables\Actions\ReplicateAction::make()->excludeAttributes(['full_name']),
                 Tables\Actions\EditAction::make()
                     ->slideOver(),
                 Tables\Actions\DeleteAction::make()
