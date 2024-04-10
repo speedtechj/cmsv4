@@ -18,7 +18,8 @@ use App\Filament\Appuser\Resources\TrackstatusResource\RelationManagers;
 class TrackstatusResource extends Resource
 {
     protected static ?string $model = Trackstatus::class;
-
+    protected static ?string $navigationLabel = 'Track  Status';
+    public static ?string $label = 'Track Status';
     protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
 
     public static function form(Form $form): Form

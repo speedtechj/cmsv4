@@ -17,7 +17,8 @@ use App\Filament\Appuser\Resources\StatuscategoryResource\RelationManagers;
 class StatuscategoryResource extends Resource
 {
     protected static ?string $model = Statuscategory::class;
-
+    protected static ?string $navigationLabel = 'Status Category';
+    public static ?string $label = 'Status Category';
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     public static function form(Form $form): Form
