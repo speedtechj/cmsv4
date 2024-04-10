@@ -2,17 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Agent;
+use App\Models\Sender;
+use App\Models\Boxtype;
+use App\Models\Receiver;
+use App\Models\Servicetype;
+use App\Models\Agentdiscount;
+use App\Models\Senderaddress;
+use App\Models\Receiveraddress;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Unpickedboxes extends Model
 {
     use HasFactory;
     protected $table = 'bookings';
-    public function discount()
-    {
-        return $this->belongsTo(Discount::class);
-    }
+    protected $guarded = [];
+    
     public function agentdiscount()
     {
         return $this->belongsTo(Agentdiscount::class);
@@ -67,6 +74,15 @@ class Unpickedboxes extends Model
         return $this->belongsTo(User::class);
     }
     
+    public function scopeUnpickedbox($query){
+        return $query->whereDate('booking_date' ,'<=',now())
+        ->where(function (Builder $query){
+            $query->where('is_pickup', false)
+            ->orWhere('is_paid', false);
+        });
+        
     
+
+    }
 
 }

@@ -4,12 +4,16 @@ namespace App\Filament\Appuser\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Agent;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Unpickedboxes;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Appuser\Resources\UnpickedboxesResource\Pages;
 use App\Filament\Appuser\Resources\UnpickedboxesResource\RelationManagers;
@@ -49,6 +53,7 @@ class UnpickedboxesResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('receiver.full_name')->label('Receiver')
                     ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 Tables\Columns\BadgeColumn::make('servicetype.description')->label('Type of Service')
                     ->color(static function ($state): string {
@@ -62,7 +67,10 @@ class UnpickedboxesResource extends Resource
                 Tables\Columns\TextColumn::make('boxtype.description'),
                 
                 Tables\Columns\IconColumn::make('is_pickup')
-                    ->label('Is Pickup')
+                    ->label('Is Pickup / Drop off')
+                    ->boolean(),
+                    Tables\Columns\IconColumn::make('is_paid')
+                    ->label('Is Paid')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('zone.description')->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('booking_date')->label('Pickup/Dropoff Date'),
@@ -72,7 +80,7 @@ class UnpickedboxesResource extends Resource
                     })->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('payment_balance')->label('Balance')->money('USD') ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('agent.full_name')->label('Agent')
-                ->toggleable(isToggledHiddenByDefault: true)
+                // ->toggleable(isToggledHiddenByDefault: true)
                 ->color('danger')
                 ->url(fn (Model $record) => AgentResource::getUrl('edit', ['record' => $record->agent_id ?? 0])),
                 // ->url(fn (Model $record) => AgentResource::getUrl('edit', $record->agent)),
@@ -91,15 +99,41 @@ class UnpickedboxesResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('agent_id')
+                ->multiple()
+                ->label('Agent')
+                ->options(Agent::all()->pluck('full_name', 'id'))
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
+                    BulkAction::make('ispickup')
+                    ->label('pickup/Dropoff')
+                ->color('primary')
+    ->icon('heroicon-o-clipboard-document-check')
+                ->action(function (Collection $records, array $data): void {
+                    foreach ($records as $record) {
+                        $record->update([
+                         'is_pickup' => true,
+                        ]);
+                    }
+                }),
+                BulkAction::make('ispaid')
+                    ->label('Is Paid')
+                ->color('success')
+    ->icon('heroicon-o-currency-dollar')
+                ->action(function (Collection $records, array $data): void {
+                    foreach ($records as $record) {
+                        $record->update([
+                         'is_paid' => true,
+                        ]);
+                    }
+                }),
                 ]),
+            
             ]);
     }
 
@@ -120,7 +154,8 @@ class UnpickedboxesResource extends Resource
     }
     public static function getEloquentQuery(): Builder
 {
-    return parent::getEloquentQuery()->whereDate('booking_date' ,'<',now())
-    ->where('is_pickup', false);
+    return parent::getEloquentQuery()->Unpickedbox();
+
+   
 }
 }
