@@ -24,7 +24,8 @@ use App\Filament\Appuser\Resources\RemarkstatusResource\RelationManagers;
 class RemarkstatusResource extends Resource
 {
     protected static ?string $model = Remarkstatus::class;
-
+    protected static ?string $navigationLabel = 'Remark Status';
+    public static ?string $label = 'Remark Status';
     protected static ?string $navigationIcon = 'heroicon-o-bookmark-square';
 
     public static function form(Form $form): Form

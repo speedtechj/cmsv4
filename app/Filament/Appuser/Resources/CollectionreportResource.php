@@ -21,7 +21,8 @@ use App\Filament\Appuser\Resources\CollectionreportResource\RelationManagers;
 class CollectionreportResource extends Resource
 {
     protected static ?string $model = Collectionreport::class;
-
+    protected static ?string $navigationLabel = 'Collection Report';
+    public static ?string $label = 'Collection Report';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

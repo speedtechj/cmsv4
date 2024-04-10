@@ -17,7 +17,8 @@ use App\Filament\Appuser\Resources\PacklistitemResource\RelationManagers;
 class PacklistitemResource extends Resource
 {
     protected static ?string $model = Packlistitem::class;
-
+    protected static ?string $navigationLabel = 'Packinglist Item';
+    public static ?string $label = 'Packinglist Item';
     protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
 
     public static function form(Form $form): Form
