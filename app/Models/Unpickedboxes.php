@@ -80,9 +80,6 @@ class Unpickedboxes extends Model
             $query->where('is_pickup', false)
             ->orWhere('is_paid', false);
         });
-        
-    
-
     }
 
 }
