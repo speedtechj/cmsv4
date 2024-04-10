@@ -11,9 +11,11 @@ use App\Models\Agentdiscount;
 use App\Models\Senderaddress;
 use App\Models\Receiveraddress;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Scopes\UnpickedboxScope;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+#[ScopedBy([UnpickedBoxScope::class])]
 class Unpickedboxes extends Model
 {
     use HasFactory;
@@ -74,12 +76,12 @@ class Unpickedboxes extends Model
         return $this->belongsTo(User::class);
     }
     
-    public function scopeUnpickedbox($query){
-        return $query->whereDate('booking_date' ,'<=',now())
-        ->where(function (Builder $query){
-            $query->where('is_pickup', false)
-            ->orWhere('is_paid', false);
-        });
-    }
+    // public function scopeUnpickedbox($query){
+    //     return $query->whereDate('booking_date' ,'<=',now())
+    //     ->where(function (Builder $query){
+    //         $query->where('is_pickup', false)
+    //         ->orWhere('is_paid', false);
+    //     });
+    // }
 
 }

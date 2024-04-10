@@ -25,7 +25,10 @@ class UnpickedboxesResource extends Resource
     public static ?string $label = 'List Unpicked Boxes';
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-check';
-
+    public static function getNavigationBadge(): ?string
+{
+    return static::getModel()::count();
+}
     public static function form(Form $form): Form
     {
         return $form
@@ -152,10 +155,10 @@ class UnpickedboxesResource extends Resource
             'edit' => Pages\EditUnpickedboxes::route('/{record}/edit'),
         ];
     }
-    public static function getEloquentQuery(): Builder
-{
-    return parent::getEloquentQuery()->Unpickedbox();
+//     public static function getEloquentQuery(): Builder
+// {
+//     return parent::getEloquentQuery()->Unpickedbox();
 
    
-}
+// }
 }
