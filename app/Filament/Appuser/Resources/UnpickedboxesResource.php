@@ -73,7 +73,7 @@ class UnpickedboxesResource extends Resource
                     ->label('Is Paid')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('zone.description')->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('booking_date')->label('Pickup/Dropoff Date'),
+                Tables\Columns\TextColumn::make('booking_date')->label('Pickup/Dropoff Date')->sortable(),
                 Tables\Columns\TextColumn::make('start_time')->label('Pickup Time')
                     ->getStateUsing(function (Model $record) {
                         return $record->start_time . " - " . $record->end_time;
