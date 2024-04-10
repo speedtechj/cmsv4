@@ -16,4 +16,10 @@ class ListUnpickedboxes extends ListRecords
             // Actions\CreateAction::make(),
         ];
     }
+    protected function getHeaderWidgets(): array
+    {
+        return [
+           UnpickedboxesResource\Widgets\Unpickedbox::class,
+        ];
+    }
 }

@@ -302,6 +302,25 @@ class BookingRelationManager extends RelationManager
                             ->send();
 
                     }),
+                    Tables\Actions\BulkAction::make('Update Pickup')
+                    ->label('Pickup update')
+                    ->icon('heroicon-o-clipboard-document-list')
+                    ->color('warning')
+                    ->action(function (Collection $records, array $data, $action) {
+                        $records->each(function ($record) use ($data) {
+                            if ($record->is_pickup == false) {
+                                Booking::where('id', $record->id)->update([
+                                    'is_pickup' => true,
+                                ]);
+                            }
+                        });
+                        Notification::make()
+                            ->icon('heroicon-o-clipboard-document-list')
+                            ->iconColor('success')
+                            ->title('Successfully Update')
+                            ->send();
+
+                    }),
                 ]),
             ]);
     }
