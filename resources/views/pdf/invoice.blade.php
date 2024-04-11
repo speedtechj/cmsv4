@@ -237,7 +237,7 @@
             <td><span class="span-text">City </span><br>{{ $record->senderaddress->citycan->name }}</td>
             <td><span class="span-text">Province </span><br> {{ $record->senderaddress->provincecan->name }}</td>
             <td><span class="span-text">Postal Code </span><br> {{ $record->senderaddress->postal_code }}</td>
-            <td align="right"><span class="span-text">Email </span><br> </td>
+            <td align="right"><span class="span-text">Email {{$record->sender->email}} </span><br> </td>
 
         </tr>
     </table>
