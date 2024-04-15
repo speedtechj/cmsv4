@@ -9,7 +9,7 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateTrackstatus extends CreateRecord
 {
     protected static string $resource = TrackstatusResource::class;
-
+    
     protected function mutateFormDataBeforeCreate(array $data): array
     {
 
