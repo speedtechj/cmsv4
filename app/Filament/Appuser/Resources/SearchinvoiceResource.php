@@ -26,8 +26,8 @@ use App\Filament\Appuser\Resources\SearchinvoiceResource\RelationManagers\Invoic
 class SearchinvoiceResource extends Resource
 {
     protected static ?string $model = Searchinvoice::class;
-    protected static ?string $navigationLabel = 'Search Invoice';
-    public static ?string $label = 'Search Invoice';
+    protected static ?string $navigationLabel = 'Track Invoice';
+    public static ?string $label = 'Track Invoice';
     protected static ?string $navigationIcon = 'heroicon-o-document-magnifying-glass';
 
     public static function form(Form $form): Form
