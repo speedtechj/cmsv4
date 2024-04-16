@@ -136,7 +136,7 @@ class RemarkstatusRelationManager extends RelationManager
                                 ->actions([
                                     Action::make('Reply')
                                         ->button()
-                                        ->url(SearchinvoiceResource::getUrl('view', ['record' => $record->booking_id])),
+                                        ->url(SearchinvoiceResource::getUrl(panel: 'twelve24').'/'.$record->booking_id.'?activeRelationManager=1'),
 
                                 ])
                                 ->sendToDatabase(User::where('id', $recipients)->first());
@@ -163,7 +163,7 @@ class RemarkstatusRelationManager extends RelationManager
                                 ->actions([
                                     Action::make('View Reply')
                                         ->button()
-                                        ->url(SearchinvoiceResource::getUrl('view', ['record' => $record->booking_id])),
+                                        ->url(SearchinvoiceResource::getUrl(panel: 'twelve24').'/'.$record->booking_id.'?activeRelationManager=1'),
                                 ])
                                 ->sendToDatabase(User::where('id', $recipients)->first());
                         }

@@ -32,7 +32,7 @@ class CreateRemarkstatus extends CreateRecord
     protected function afterCreate(): void
     {
         $recipients = $this->record->assign_to;
-        
+       
   
        Notification::make()
        ->title('New Request Created')
@@ -42,7 +42,7 @@ class CreateRemarkstatus extends CreateRecord
        ->iconColor('success')
        ->actions([
             Action::make('Reply')
-            ->url($this->getResource()::getUrl('edit', ['record' => $this->record]))
+            ->url(RemarkstatusResource::getUrl(panel:'twelve24'))
        ])
        ->sendToDatabase(User::where('id', $recipients)->first());
     }

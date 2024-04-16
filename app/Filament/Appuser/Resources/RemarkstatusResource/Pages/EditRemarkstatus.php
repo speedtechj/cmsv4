@@ -43,7 +43,7 @@ class EditRemarkstatus extends EditRecord
                 ->iconColor('success')
                 ->actions([
                     Action::make('View Reply')
-                        ->url($this->getResource()::getUrl('edit', ['record' => $this->record]))
+                    ->url(RemarkstatusResource::getUrl(panel:'twelve24'))
                 ])
                 ->sendToDatabase(User::where('id', $recipients)->first());
         }

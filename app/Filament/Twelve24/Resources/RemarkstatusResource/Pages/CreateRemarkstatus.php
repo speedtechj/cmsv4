@@ -44,8 +44,8 @@ class CreateRemarkstatus extends CreateRecord
        ->iconColor('success')
        ->actions([
             Action::make('Reply')
-            // ->url(RemarkstatusResource::getUrl('edit', ['record' => $this->record]))
-            ->url(fn (Model $record) => route('filament.resources.senders.edit', $record->id))
+            ->url(RemarkstatusResource::getUrl(panel:'twelve24'))
+           
        ])
        ->sendToDatabase(User::where('id', $recipients)->first());
     }
