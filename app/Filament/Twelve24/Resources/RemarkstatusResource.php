@@ -25,7 +25,7 @@ class RemarkstatusResource extends Resource
 {
     protected static ?string $model = Remarkstatus::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-bookmark';
 
     public static function form(Form $form): Form
     {

@@ -29,8 +29,9 @@ class AddinvoicestatusResource extends Resource
 {
     protected static ?string $model = Addinvoicestatus::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationGroup = 'Invoice Status';
+    protected static ?string $navigationLabel = 'Add Invoice Status';
+    public static ?string $label = 'Add Invoice Status';
     public static function form(Form $form): Form
     {
         return $form

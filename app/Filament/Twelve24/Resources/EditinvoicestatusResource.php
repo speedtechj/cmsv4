@@ -27,7 +27,9 @@ class EditinvoicestatusResource extends Resource
 {
     protected static ?string $model = Editinvoicestatus::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Invoice Status';
+    protected static ?string $navigationLabel = 'Edit/Delete Invoice Status';
+    public static ?string $label = 'Edit/Delete Invoice Status';
 
     public static function form(Form $form): Form
     {

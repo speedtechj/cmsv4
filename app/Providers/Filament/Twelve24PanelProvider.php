@@ -9,6 +9,7 @@ use Filament\PanelProvider;
 use Filament\Navigation\MenuItem;
 use Filament\Support\Colors\Color;
 use App\Filament\Pages\Auth\EditProfile;
+use Filament\Navigation\NavigationGroup;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -64,7 +65,13 @@ class Twelve24PanelProvider extends PanelProvider
                 ->icon( 'heroicon-o-user' )
                 ->url( '/admin' )
                 ->visible( fn (): bool => auth()->user()->isAdmin() )
-            ] );
+            ] )
+            ->navigationGroups( [
+                NavigationGroup::make( 'Invoice Status' )->icon( 'heroicon-o-circle-stack'),
+                // NavigationGroup::make( 'Philippines Location' )->icon( 'heroicon-o-map-pin' ),
+                // NavigationGroup::make( 'App Settings')->icon( 'heroicon-o-cog-6-tooth' )
+                
+            ] );;
             
             
     }
