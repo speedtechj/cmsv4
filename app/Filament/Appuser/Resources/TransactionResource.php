@@ -49,7 +49,7 @@ class TransactionResource extends Resource
             ->schema([
                 Section::make('Sender Information')
                     ->schema(static::getDetailsFormSchema())
-                    ->columnSpan('full'),
+                    ->columns('2'),
                 Section::make('Transaction Information')
                     ->schema([
                         static::getItemsRepeater(),
@@ -98,12 +98,21 @@ class TransactionResource extends Resource
                 ->default(request()->query('ownerRecord'))
                 ->dehydrated(false),
             Forms\Components\Select::make('senderaddress_id')
+                ->live()
                 ->options(function (Get $get, Set $set, $state) {
                     return Senderaddress::Senderaddresslist($get('sender_id'));
                 })
                 ->label('Sender Address')
                 ->required()
                 ->dehydrated(false)
+                ->afterStateUpdated(function ( Get $get, Set $set, $state) {
+                  $quadrant = Senderaddress::where('id',$get('senderaddress_id'))->first()->quadrant;
+                    $set('quadrant',$quadrant);
+                }),
+                Forms\Components\TextInput::make('quadrant')
+                ->label('Quadrant')
+                ->dehydrated(false)
+                
         ];
     }
     public static function getItemsRepeater(): Repeater

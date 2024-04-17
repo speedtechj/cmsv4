@@ -52,6 +52,7 @@ class SenderaddressResource extends Resource
                     return $province->citycan->pluck('name', 'id');
                 }),
             Forms\Components\Select::make('quadrant')
+            ->required()
             ->options([
                 'NW' => 'North West',
                 'SW' => 'South West',

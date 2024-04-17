@@ -193,6 +193,13 @@ class BookingRelationManager extends RelationManager
                     Tables\Actions\ForceDeleteAction::make(),
                     Tables\Actions\RestoreAction::make(),
                 Tables\Actions\EditAction::make()
+                ->mutateRecordDataUsing(function (Model $record, array $data): array {
+                    $reciveraddress = Receiveraddress::where('id', $record->receiveraddress_id)->first();
+                    $data['province'] = $reciveraddress->provincephil->name;
+                    $data['city'] = $reciveraddress->cityphil->name;
+                    $data['barangay'] = $reciveraddress->barangayphil->name;
+                    return $data;
+                })
                     ->mutateFormDataUsing(function (array $data): array {
                         $data['user_id'] = auth()->id();
                         $data['payment_balance'] = $data['total_price'];
@@ -387,12 +394,23 @@ class BookingRelationManager extends RelationManager
                 ->label('Receiver Address')
                 ->live()
                 ->options(function (Get $get, Set $set, $state) {
+
                     return Receiveraddress::Receiveraddresslist($get('receiver_id'));
                 })
                 ->required()
                 ->afterStateUpdated(function (PriceService $priceService, Get $get, Set $set, $state) {
+                    $reciveraddress = Receiveraddress::where('id', $state)->first();
+                    $set('province',$reciveraddress->provincephil->name);
+                    $set('city', $reciveraddress->cityphil->name);
+                   $set('barangay', $reciveraddress->barangayphil->name ?? null);
                     $priceService->calculatePrice($state, $get, $set);
                 }),
+            Forms\Components\TextInput::make('province')
+            ->dehydrated(false),
+            Forms\Components\TextInput::make('city')
+            ->dehydrated(false),
+            Forms\Components\TextInput::make('barangay')
+            ->dehydrated(false),
             Forms\Components\TextInput::make('manual_invoice')
                 ->label('Manual Invoice'),
             Forms\Components\Select::make('boxtype_id')
