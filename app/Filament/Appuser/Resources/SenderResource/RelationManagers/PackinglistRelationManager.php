@@ -23,42 +23,43 @@ class PackinglistRelationManager extends RelationManager
         return $form
             ->schema([
                 Section::make('Attached Documents')
-                ->schema([
-                    FileUpload::make('packlistdoc')
-                    ->label('Packing List')
-                    ->multiple()
-                    ->enableDownload()
-                    ->disk('public')
-                    ->directory('packinglist')
-                    ->visibility('private')
-                    ->enableOpen(),
-                    FileUpload::make('waiverdoc')
-                    ->label('Waiver Document')
-                    ->multiple()
-                    ->enableDownload()
-                    ->disk('public')
-                    ->directory('waiver')
-                    ->visibility('private')
-                    ->enableOpen(),
-                ])->columns(2),
-                Section::make('Details Packing List')
-                ->schema([
-                    Repeater::make('packlistitem')
                     ->schema([
-                        Forms\Components\TextInput::make('quantity')
-                        ->label('Quantity')
-                        ->numeric(),
-                Forms\Components\Select::make('packlistitem')
-                    ->label('Premade Items')
-                    ->options(Packlistitem::all()->pluck('itemname', 'itemname'))
-                    ->searchable()
-                    ->columnSpan('2'),
-                Forms\Components\TextInput::make('price')
-                ->label('Price')
-                ->prefix('$')
-                ->columnSpan('1'),
-                    ])->columns(3),
-                    
+                        FileUpload::make('packlistdoc')
+                            ->label('Packing List')
+                            ->multiple()
+                            ->enableDownload()
+                            ->disk('public')
+                            ->directory('packinglist')
+                            ->visibility('private')
+                            ->enableOpen(),
+                        FileUpload::make('waiverdoc')
+                            ->label('Waiver Document')
+                            ->multiple()
+                            ->enableDownload()
+                            ->disk('public')
+                            ->directory('waiver')
+                            ->visibility('private')
+                            ->enableOpen(),
+                    ])->columns(2),
+                Section::make('Details Packing List')
+                    ->schema([
+                        Repeater::make('packlistitem')
+                            ->schema([
+                                Forms\Components\TextInput::make('quantity')
+                                    ->label('Quantity')
+                                    ->numeric(),
+                                Forms\Components\Select::make('packlistitem')
+                                    ->label('Premade Items')
+                                    ->options(Packlistitem::all()->pluck('itemname', 'itemname'))
+                                    ->searchable()
+                                    ->columnSpan('2'),
+                                Forms\Components\TextInput::make('price')
+                                    ->label('Price')
+                                    ->prefix('$')
+                                    ->columnSpan('1'),
+                            ])->columns(3)
+                            ->maxItems(3),
+
                     ]),
             ]);
     }
@@ -69,9 +70,9 @@ class PackinglistRelationManager extends RelationManager
             ->recordTitleAttribute('booking_id')
             ->columns([
                 Tables\Columns\TextColumn::make('sender.full_name')
-                ->label('Sender'),
+                    ->label('Sender'),
                 Tables\Columns\TextColumn::make('booking.booking_invoice')
-                ->label('Booking Invoice'),
+                    ->label('Booking Invoice'),
             ])
             ->filters([
                 //
