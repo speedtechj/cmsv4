@@ -46,6 +46,18 @@ class CustomerhistoryRelationManager extends RelationManager
                     Tables\Columns\TextColumn::make('receiver.full_name')->label('Receiver')
                     ->sortable()
                     ->searchable(),
+                    Tables\Columns\TextColumn::make('receiveraddress.address')->label('Address')
+                    ->sortable()
+                    ->searchable(),
+                    Tables\Columns\TextColumn::make('receiveraddress.provincephil.name')->label('Province')
+                    ->sortable()
+                    ->searchable(),
+                    Tables\Columns\TextColumn::make('receiveraddress.cityphil.name')->label('City')
+                    ->sortable()
+                    ->searchable(),
+                    Tables\Columns\TextColumn::make('receiveraddress.barangayphil.name')->label('Barangay')
+                    ->sortable()
+                    ->searchable(),
                     Tables\Columns\BadgeColumn::make('servicetype.description')->label('Type of Service')
                     ->sortable()
                     ->color(static function ($state): string {
