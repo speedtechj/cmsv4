@@ -35,5 +35,8 @@ class Sender extends Model
     public function packinglist(){
         return $this->hasMany(Packinglist::class);
     }
+    public function customerhistory(){
+        return $this->hasMany(Customerhistory::class, );
+    }
    
 }
