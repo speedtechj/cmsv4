@@ -15,7 +15,7 @@ use App\Filament\Appuser\Resources\SearchinvoiceResource;
 class CustomerhistoryRelationManager extends RelationManager
 {
     protected static string $relationship = 'customerhistory';
-    public static ?string $title = 'Sender Transaction History';
+    public static ?string $title = 'Transaction History';
 
     public function form(Form $form): Form
     {
