@@ -90,6 +90,9 @@ class ManifestResource extends Resource
             Tables\Columns\TextColumn::make('receiver.home_no')
                 ->label('Home No')
                 ->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('booking_date')
+                ->label('Home No')
+                ->searchable()->sortable(),
             ])
             ->filters([
                 SelectFilter::make('batch_id')
