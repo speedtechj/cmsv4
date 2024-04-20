@@ -134,11 +134,7 @@ class EditinvoicestatusResource extends Resource
                         Forms\Components\Textarea::make('remarks')
                     ])
                     ->action(function (Model $record, array $data): void {
-                        if ($data['id'] == 15) {
-                            $record->update([
-                                'is_deliver' => true,
-                            ]);
-                        }
+                       
                         $record->update([
                             'date_update' => $data['date_update'],
                             'remarks' => $data['remarks'],
@@ -160,11 +156,7 @@ class EditinvoicestatusResource extends Resource
                             ->icon('heroicon-o-pencil')
                             ->action(function (Collection $records, array $data): void {
                                 foreach ($records as $record) {
-                                    if ($data['id'] == 15) {
-                                        $record->update([
-                                            'is_deliver' => true,
-                                        ]);
-                                    }
+                                    
                                     $record->update([
                                         'date_update' => $data['date_update'],
                                         'remarks' => $data['remarks'],

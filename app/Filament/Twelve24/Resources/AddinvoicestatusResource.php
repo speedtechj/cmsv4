@@ -123,17 +123,21 @@ class AddinvoicestatusResource extends Resource
                 ->icon('heroicon-o-clipboard-document')
                 ->label('Update')
                 ->action(function (Model $record, array $data): void {
+                    
                     $statusupdate = InvoiceStatus::where('booking_id', $record->id)
-                        ->where('trackstatus_id', $data['id'])
-                        ->count();
-                        if($data['id'] == 15)
+                    ->where('trackstatus_id', $data['id'])
+                    ->count();
+                    $trackstatus = Trackstatus::where('id', $data['id'])->first()->description;
+                    
+                   
+                        if( $trackstatus == 'Delivered')
                         {
                             $record->update([
                                 'is_deliver' => true,
                             ]);
                         }
                         
-                    dd($record);
+               
                     if ($statusupdate == 0) {
                         Invoicestatus::create([
                             'generated_invoice' => $record->booking_invoice,
@@ -189,10 +193,10 @@ class AddinvoicestatusResource extends Resource
                         $statusupdate = InvoiceStatus::where('booking_id', $record->id)
                             ->where('trackstatus_id', $data['id'])
                             ->count();
-                            if($data['id'] == 15)
+                            if( $trackstatus == 'Delivered')
                             {
                                 $record->update([
-                                    'is_deliver' => false,
+                                    'is_deliver' => true,
                                 ]);
                             }
                         if ($statusupdate == 0) {
