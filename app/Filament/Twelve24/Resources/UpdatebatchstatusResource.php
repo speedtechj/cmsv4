@@ -146,6 +146,7 @@ class UpdatebatchstatusResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\BulkAction::make('Update Status')
                     ->icon('heroicon-o-clipboard-document-list')
