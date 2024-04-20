@@ -91,7 +91,7 @@ class ManifestResource extends Resource
                 ->label('Home No')
                 ->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('booking_date')
-                ->label('Home No')
+                ->label('Booking Date')
                 ->searchable()->sortable(),
             ])
             ->filters([
