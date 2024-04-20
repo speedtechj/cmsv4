@@ -184,7 +184,7 @@ class UpdatebatchstatusResource extends Resource
         return [
             'index' => Pages\ListUpdatebatchstatuses::route('/'),
             'create' => Pages\CreateUpdatebatchstatus::route('/create'),
-            'edit' => Pages\EditUpdatebatchstatus::route('/{record}/edit'),
+            // 'edit' => Pages\EditUpdatebatchstatus::route('/{record}/edit'),
         ];
     }
 }

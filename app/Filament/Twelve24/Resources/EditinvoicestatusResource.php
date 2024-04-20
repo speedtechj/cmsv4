@@ -192,7 +192,7 @@ class EditinvoicestatusResource extends Resource
         return [
             'index' => Pages\ListEditinvoicestatuses::route('/'),
             'create' => Pages\CreateEditinvoicestatus::route('/create'),
-            'edit' => Pages\EditEditinvoicestatus::route('/{record}/edit'),
+            // 'edit' => Pages\EditEditinvoicestatus::route('/{record}/edit'),
         ];
     }
 
