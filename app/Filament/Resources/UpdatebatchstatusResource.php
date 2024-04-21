@@ -148,27 +148,27 @@ class UpdatebatchstatusResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\BulkAction::make('Assign Batch')
-                    ->label('Assign Batch')
-                    ->icon('heroicon-o-clipboard-document-list')
-                    ->color('primary')
-                    ->form([
-                        Select::make('batch_id')
-                            ->label('Batch Number')
-                            ->options(Batch::all()->pluck('batchno', 'id'))
-                            ->required(),
-                    ])
-                ->action(function (Collection $records, array $data): void {
+                //     Tables\Actions\BulkAction::make('Assign Batch')
+                //     ->label('Assign Batch')
+                //     ->icon('heroicon-o-clipboard-document-list')
+                //     ->color('primary')
+                //     ->form([
+                //         Select::make('batch_id')
+                //             ->label('Batch Number')
+                //             ->options(Batch::all()->pluck('batchno', 'id'))
+                //             ->required(),
+                //     ])
+                // ->action(function (Collection $records, array $data): void {
                   
-                    foreach ($records as $record) {
+                //     foreach ($records as $record) {
                        
-                        $record->booking->update([
+                //         $record->booking->update([
 
-                            'batch_id' => $data['batch_id'],
+                //             'batch_id' => $data['batch_id'],
                        
-                        ]);
-                    }
-                }),
+                //         ]);
+                //     }
+                // }),
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\BulkAction::make('Update Status')
                     ->icon('heroicon-o-clipboard-document-list')

@@ -193,12 +193,16 @@ class AddinvoicestatusResource extends Resource
                         $statusupdate = InvoiceStatus::where('booking_id', $record->id)
                             ->where('trackstatus_id', $data['id'])
                             ->count();
+                            $trackstatus = Trackstatus::where('id', $data['id'])->first()->description;
+                    
+                   
                             if( $trackstatus == 'Delivered')
                             {
                                 $record->update([
                                     'is_deliver' => true,
                                 ]);
                             }
+                            
                         if ($statusupdate == 0) {
                             Invoicestatus::create([
                                 'generated_invoice' => $record->booking_invoice,
