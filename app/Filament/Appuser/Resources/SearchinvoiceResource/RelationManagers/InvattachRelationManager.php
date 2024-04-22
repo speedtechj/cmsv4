@@ -28,6 +28,7 @@ class InvattachRelationManager extends RelationManager
                 ->visibility('private')
                 ->required()
                 ->enableOpen(),
+               
             ]);
     }
 
