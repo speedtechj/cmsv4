@@ -82,6 +82,10 @@ class SearchinvoiceResource extends Resource
             Section::make('Sender Details')
                 ->columns(5)
                 ->schema([
+                    TextEntry::make('booking_invoice')
+                            ->label('Generated Invoice'),
+                            TextEntry::make('manual_invoice')
+                            ->label('Manual Invoice'),
                     TextEntry::make('sender.full_name')
                         ->label('Name')
                         ->helperText('Click to Edit')
