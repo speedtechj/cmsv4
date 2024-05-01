@@ -27,7 +27,7 @@ class Booking extends Model
             $invoice->booking_invoice =  str_pad($invoice->booking_invoice, 7, '0', STR_PAD_LEFT);
 
 
-
+           
             // $invprefix = Storecode::get()->first()->storecode;
             // // Custom invoice number generation logic, e.g., adding a prefix or suffix
             // $lastbooking = Booking::orderBy('booking_invoice', 'desc')->first();

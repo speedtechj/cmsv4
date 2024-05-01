@@ -30,6 +30,7 @@ class Twelve24PanelProvider extends PanelProvider
             ->path('1224')
             ->databaseNotifications()
             ->brandName('12:24 Cargo Express')
+            ->spa()
             ->login()
             ->readOnlyRelationManagersOnResourceViewPagesByDefault(false)
             ->profile(EditProfile::class)
