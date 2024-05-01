@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Scopes\InvdeliverScope;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+#[ScopedBy([InvdeliverScope::class])]
 class Searchinvoice extends Model
 {
     use HasFactory;
