@@ -63,7 +63,7 @@ class AgentResource extends Resource
                             return $province->citycan->pluck('name', 'id');
                         }),
                     Forms\Components\TextInput::make('postal_code')
-                    ->mask('A9A 9A9')
+                    ->mask('a9a 9a9')
                     // ->stripCharacters(['(',')','-'])
                         ->required(),
                        
