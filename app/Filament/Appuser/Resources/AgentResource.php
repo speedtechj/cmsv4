@@ -63,9 +63,10 @@ class AgentResource extends Resource
                             return $province->citycan->pluck('name', 'id');
                         }),
                     Forms\Components\TextInput::make('postal_code')
-                        ->mask('aaa aaa')
-                        ->required()
-                        ->maxLength(255),
+                    ->mask('A9A 9A9')
+                    // ->stripCharacters(['(',')','-'])
+                        ->required(),
+                       
 
                     Forms\Components\DatePicker::make('date_of_birth')->label('Date of Birth')
                         ->required(),
