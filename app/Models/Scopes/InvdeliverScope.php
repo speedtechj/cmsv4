@@ -13,6 +13,6 @@ class InvdeliverScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->where('is_deliver', true);
+        $builder->where('is_deliver', false);
     }
 }
