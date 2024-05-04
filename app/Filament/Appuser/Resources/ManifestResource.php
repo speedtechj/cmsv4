@@ -99,6 +99,11 @@ class ManifestResource extends Resource
                 ->options(Batch::Batchmanifest())
                 // ->relationship('batch', 'batchno', fn (Builder $query) => $query->where('is_active', '1'))
                 ->default(array('Select Batch Number')),
+            ],
+            layout: FiltersLayout::AboveContent
+        )
+            ->actions([
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
