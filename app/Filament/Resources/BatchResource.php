@@ -52,8 +52,12 @@ class BatchResource extends Resource
             ->persistSortInSession()
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('batchno'),
-                Tables\Columns\TextColumn::make('batch_year'),
+                Tables\Columns\TextColumn::make('batchno')
+                ->label('Batch No')
+                ->searchable(),
+                Tables\Columns\TextColumn::make('batch_year')
+                ->label('Year')
+                ->searchable(),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean()
                     ->label('Active')

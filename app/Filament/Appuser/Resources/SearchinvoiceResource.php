@@ -86,6 +86,8 @@ class SearchinvoiceResource extends Resource
                             ->label('Generated Invoice'),
                             TextEntry::make('manual_invoice')
                             ->label('Manual Invoice'),
+                            TextEntry::make('boxtype.description')
+                            ->label('Box Type'),
                     TextEntry::make('sender.full_name')
                         ->label('Name')
                         ->helperText('Click to Edit')
