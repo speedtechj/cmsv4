@@ -94,7 +94,7 @@ class ManifestResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('batch_id')
-                ->multiple()
+                // ->multiple()
                 ->searchable()
                 ->preload()
                 ->label('Batch Number')
