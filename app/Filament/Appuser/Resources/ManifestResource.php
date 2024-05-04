@@ -96,8 +96,8 @@ class ManifestResource extends Resource
                 SelectFilter::make('batch_id')
                 ->multiple()
                 ->label('Batch Number')
-                ->options(Batch::Batchmanifest())
-                // ->relationship('batch', 'batchno', fn (Builder $query) => $query->where('is_active', '1'))
+                // ->options(Batch::Batchmanifest())
+                ->relationship('batch', 'batchno', fn (Builder $query) => $query->where('is_active', '1'))
                 ->default(array('Select Batch Number')),
             ],
             layout: FiltersLayout::AboveContent
