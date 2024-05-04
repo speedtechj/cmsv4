@@ -94,10 +94,8 @@ class ManifestResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('batch_id')
-                // ->multiple()
+                ->multiple()
                 ->label('Batch Number')
-                ->searchable()
-                ->preload()
                 ->options(Batch::Batchmanifest())
                 // ->relationship('batch', 'batchno', fn (Builder $query) => $query->where('is_active', '1'))
                 ->default(array('Select Batch Number')),
