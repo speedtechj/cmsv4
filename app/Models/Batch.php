@@ -17,7 +17,8 @@ class Batch extends Model
     }
 
     public function scopeBatchmanifest($query){
-        return $query->where('is_active', 1)->get()->pluck('batchno', 'id');
+        // return $query->where('is_active', 1)->get()->pluck('batchno', 'id');
+        return $query->get()->pluck('batchno', 'id');
         
     }
 
