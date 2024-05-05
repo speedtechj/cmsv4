@@ -13,20 +13,20 @@ class Bookingobserver
      */
     public function created(Booking $booking): void
     {
-        $lastbooking = Booking::orderBy('booking_invoice', 'desc')->first();
+        // $lastbooking = Booking::orderBy('booking_invoice', 'desc')->first();
 
 
-        $skiddingresult = Skiddinginfo::where('virtual_invoice', $booking->booking_invoice)
-            ->orWhere('virtual_invoice', $booking->manual_invoice);
-            if($skiddingresult->exists()){
-                $skiddingresult->update(
-                    [
-                        'boxtype_id' => $booking->boxtype_id,
-                        'is_encode' => true,
-                        'booking_id' => $booking->id
-                    ]
-                );
-            }
+        // $skiddingresult = Skiddinginfo::where('virtual_invoice', $booking->booking_invoice)
+        //     ->orWhere('virtual_invoice', $booking->manual_invoice);
+        //     if($skiddingresult->exists()){
+        //         $skiddingresult->update(
+        //             [
+        //                 'boxtype_id' => $booking->boxtype_id,
+        //                 'is_encode' => true,
+        //                 'booking_id' => $booking->id
+        //             ]
+        //         );
+        //     }
         // $skiddingresult->update(
         //     [
         //         'boxtype_id' => $booking->boxtype_id,
