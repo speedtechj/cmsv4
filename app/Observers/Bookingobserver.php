@@ -27,14 +27,14 @@ class Bookingobserver
                     ]
                 );
             }
-        // $skiddingresult->update(
-        //     [
-        //         'boxtype_id' => $booking->boxtype_id,
-        //         'is_encode',
-        //         true,
-        //         'booking_id' => $booking->id
-        //     ]
-        // );
+        $skiddingresult->update(
+            [
+                'boxtype_id' => $booking->boxtype_id,
+                'is_encode',
+                true,
+                'booking_id' => $booking->id
+            ]
+        );
     }
 
     /**
