@@ -45,7 +45,7 @@ class BoxtypeResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('description'),
-                Tables\Columns\TextColumn::make('length'),
+                Tables\Columns\TextColumn::make('lenght'),
                 Tables\Columns\TextColumn::make('width'),
                 Tables\Columns\TextColumn::make('height'),
                 Tables\Columns\TextColumn::make('dimension'),
