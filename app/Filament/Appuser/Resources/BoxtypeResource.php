@@ -25,12 +25,18 @@ class BoxtypeResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('description')
-                ->required()
-                ->maxLength(255),
-            Forms\Components\TextInput::make('dimension')
-                ->maxLength(255),
-            Forms\Components\TextInput::make('total_box')
-                ->required(),
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('dimension')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('lenght')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('width')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('height')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('total_box')
+                    ->required(),
             ]);
     }
 
@@ -39,6 +45,9 @@ class BoxtypeResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('description'),
+                Tables\Columns\TextColumn::make('length'),
+                Tables\Columns\TextColumn::make('width'),
+                Tables\Columns\TextColumn::make('height'),
                 Tables\Columns\TextColumn::make('dimension'),
                 Tables\Columns\TextColumn::make('total_box'),
                 Tables\Columns\TextColumn::make('created_at')
