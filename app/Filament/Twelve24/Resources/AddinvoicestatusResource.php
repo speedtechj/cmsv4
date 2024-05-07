@@ -47,11 +47,11 @@ class AddinvoicestatusResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('booking_invoice')
                 ->label('Invoice')
-                ->searchable(isIndividual: true, isGlobal: false)
+                ->searchable()
                 ->sortable(),
             Tables\Columns\TextColumn::make('manual_invoice')
                 ->label('Manual Invoice')
-                ->searchable(isIndividual: true, isGlobal: false)
+                ->searchable()
                 ->sortable(),
             Tables\Columns\TextColumn::make('boxtype.description')
                 ->label('Box Type')
