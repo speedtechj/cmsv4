@@ -55,11 +55,10 @@ class AddinvoicestatusResource extends Resource
                 ->sortable(),
             Tables\Columns\TextColumn::make('boxtype.description')
                 ->label('Box Type')
-               
                 ->sortable(),
             Tables\Columns\TextColumn::make('receiver.full_name')
                 ->label('Receiver Name')
-               
+                ->searchable()
                 ->sortable(),
             Tables\Columns\TextColumn::make('receiveraddress.provincephil.name')
                 ->label('Province'),
