@@ -13,8 +13,6 @@ class Bookingobserver
      */
     public function created(Booking $booking): void
     {
-        
-
         $skiddingresult = Skiddinginfo::where('virtual_invoice', $booking->booking_invoice)
             ->orWhere('virtual_invoice', $booking->manual_invoice);
             if($skiddingresult->exists()){
@@ -34,7 +32,17 @@ class Bookingobserver
      */
     public function updated(Booking $booking): void
     {
-       
+        $skiddingresult = Skiddinginfo::where('virtual_invoice', $booking->booking_invoice)
+        ->orWhere('virtual_invoice', $booking->manual_invoice);
+        if($skiddingresult->exists()){
+            $skiddingresult->update(
+                [
+                    'boxtype_id' => $booking->boxtype_id,
+                    'is_encode' => true,
+                    'booking_id' => $booking->id
+                ]
+            );
+        }
     }
 
     /**
