@@ -90,8 +90,11 @@ class BookingRelationManager extends RelationManager
                 Tables\Columns\IconColumn::make('is_pickup')
                     ->label('Is Pickup')
                     ->boolean(),
+                    Tables\Columns\TextColumn::make('senderaddress.quadrant')
+                    ->sortable()
+                    ->label('Quadrant'),
                 Tables\Columns\TextColumn::make('zone.description'),
-                Tables\Columns\TextColumn::make('senderaddress.quadrant'),
+                
                 Tables\Columns\TextColumn::make('booking_date')->label('Pickup/Dropoff Date')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('start_time')->label('Pickup/Dropoff Time')
