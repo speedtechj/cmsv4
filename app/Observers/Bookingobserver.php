@@ -14,6 +14,7 @@ class Bookingobserver
      */
     public function created(Booking $booking): void
     {
+       
         
         $currentbatch = Batch::where('is_current', true)->first();
         $skiddingresult = Skiddinginfo::where('virtual_invoice', $booking->booking_invoice)
