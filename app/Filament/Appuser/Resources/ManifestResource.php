@@ -47,6 +47,9 @@ class ManifestResource extends Resource
                 ->label('Manual Invoice')
                 ->searchable()
                 ->sortable(),
+                Tables\Columns\TextColumn::make('booking_date')
+                ->label('Booking Date')
+                ->searchable()->sortable(),
             Tables\Columns\TextColumn::make('Quantity')
                 ->label('Quantity')
                 ->default('1'),
@@ -90,7 +93,7 @@ class ManifestResource extends Resource
             Tables\Columns\TextColumn::make('receiver.home_no')
                 ->label('Home No')
                 ->searchable()->sortable(),
-                
+            
             ])
             ->filters([
                 SelectFilter::make('batch_id')
