@@ -55,12 +55,13 @@ class Bookingobserver
                         'booking_id' => $booking->id
                     ]
                 ); 
+                $booking->update(
+                    [
+                        'batch_id' => $currentbatch->id
+                    ]
+                );
             }
-            $booking->update(
-                [
-                    'batch_id' => $currentbatch->id
-                ]
-            );
+            
         }
     }
 
