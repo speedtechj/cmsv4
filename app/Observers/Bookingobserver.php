@@ -48,7 +48,7 @@ class Bookingobserver
         if($booking->batch_id == 23){
             $skiddingresult = Skiddinginfo::where('virtual_invoice', $booking->booking_invoice)
             ->orWhere('virtual_invoice', $booking->manual_invoice);
-            if($skiddingresult){
+            if($skiddingresult->exists()){
                
                 $currentbatch = Batch::where('is_current', true)->first();
                 $skiddingresult->update(
