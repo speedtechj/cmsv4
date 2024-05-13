@@ -413,7 +413,8 @@ class BookingRelationManager extends RelationManager
             Forms\Components\TextInput::make('barangay')
             ->dehydrated(false),
             Forms\Components\TextInput::make('manual_invoice')
-                ->label('Manual Invoice'),
+                ->label('Manual Invoice')
+                ->unique(),
             Forms\Components\Select::make('boxtype_id')
                 ->live()
                 ->options(Boxtype::all()->pluck('description', 'id'))

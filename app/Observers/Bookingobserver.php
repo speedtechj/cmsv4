@@ -43,7 +43,7 @@ class Bookingobserver
      */
     public function updated(Booking $booking): void
     {
-       
+      
        
         // if($booking->batch_id == 23){
             $skiddingresult = Skiddinginfo::where('virtual_invoice', $booking->booking_invoice)
