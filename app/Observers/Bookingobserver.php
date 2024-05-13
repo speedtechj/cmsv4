@@ -43,12 +43,13 @@ class Bookingobserver
      */
     public function updated(Booking $booking): void
     {
-        $currentbatch = Batch::where('is_current', true)->first();
+       
        
         // if($booking->batch_id == 23){
             $skiddingresult = Skiddinginfo::where('virtual_invoice', $booking->booking_invoice)
             ->orWhere('virtual_invoice', $booking->manual_invoice);
             if($skiddingresult->exists()){
+                $currentbatch = Batch::where('is_current', true)->first();
                 $skiddingresult->update(
                     [
                         'boxtype_id' => $booking->boxtype_id,
@@ -61,6 +62,8 @@ class Bookingobserver
                         'batch_id' => $currentbatch->id
                     ]
                 );
+            }else {
+
             }
             
        // }
