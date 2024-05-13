@@ -14,7 +14,18 @@ class Bookingobserver
      */
     public function created(Booking $booking): void
     {
-       
+        if($booking->boxtype_id == '4'){
+            $length = $booking->irregular_length;
+            $width = $booking->irregular_width;
+            $height = $booking->irregular_height;
+            $boxcbm = round($length * $width * $height / 61024, 2);
+          
+           }else {
+            $length = $booking->boxtype->lenght ?? 0;
+            $width = $booking->boxtype->width ?? 0;
+            $height = $booking->boxtype->height ?? 0;
+            $boxcbm = round($length * $width * $height / 61024, 2);
+           }
         $currentbatch = Batch::where('is_current', true)->first();
         $skiddingresult = Skiddinginfo::where('virtual_invoice', $booking->booking_invoice)
             ->orWhere('virtual_invoice', $booking->manual_invoice);
@@ -23,7 +34,8 @@ class Bookingobserver
                     [
                         'boxtype_id' => $booking->boxtype_id,
                         'is_encode' => true,
-                        'booking_id' => $booking->id
+                        'booking_id' => $booking->id,
+                        'cbm' => $boxcbm,
                     ]
                 );
                 $booking->update(
@@ -31,6 +43,8 @@ class Bookingobserver
                         'batch_id' => $currentbatch->id
                     ]
                 );
+
+
                 
             }
             
@@ -42,9 +56,22 @@ class Bookingobserver
      */
     public function updated(Booking $booking): void
     {
+        
+       if($booking->boxtype_id == '4'){
+        $length = $booking->irregular_length;
+        $width = $booking->irregular_width;
+        $height = $booking->irregular_height;
+        $boxcbm = round($length * $width * $height / 61024, 2);
       
-       
-        if($booking->batch_id == 23){
+       }else {
+        $length = $booking->boxtype->lenght ?? 0;
+        $width = $booking->boxtype->width ?? 0;
+        $height = $booking->boxtype->height ?? 0;
+        $boxcbm = round($length * $width * $height / 61024, 2);
+       }
+        
+     
+        // if($booking->batch_id == 23){
             $skiddingresult = Skiddinginfo::where('virtual_invoice', $booking->booking_invoice)
             ->orWhere('virtual_invoice', $booking->manual_invoice);
             if($skiddingresult->exists()){
@@ -54,18 +81,21 @@ class Bookingobserver
                     [
                         'boxtype_id' => $booking->boxtype_id,
                         'is_encode' => true,
-                        'booking_id' => $booking->id
+                        'booking_id' => $booking->id,
+                        'cbm' => $boxcbm,
                     ]
                 ); 
                 
-                
-                    $booking->update(['batch_id' => $currentbatch->id]);
+                    if($booking->batch_id != $currentbatch->id){
+                        $booking->update(['batch_id' => $currentbatch->id]);
+                    }
+                    
                 
                 
                 
             }
             
-      }
+    //   }
     }
 
     /**
