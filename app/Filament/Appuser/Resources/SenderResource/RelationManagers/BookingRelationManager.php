@@ -222,7 +222,8 @@ class BookingRelationManager extends RelationManager
                         }
                         return $data;
                     }),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                ->visible( fn (): bool => auth()->user()->isAdmin() ),
               
                     Tables\Actions\Action::make('Payment')
                         ->hidden(fn(Booking $record): bool => $record['payment_balance'] == 0)
@@ -413,8 +414,8 @@ class BookingRelationManager extends RelationManager
             Forms\Components\TextInput::make('barangay')
             ->dehydrated(false),
             Forms\Components\TextInput::make('manual_invoice')
-                ->label('Manual Invoice')
-                ->unique(),
+            ->visible( fn (): bool => auth()->user()->isAdmin() )
+                ->label('Manual Invoice'),
             Forms\Components\Select::make('boxtype_id')
                 ->live()
                 ->options(Boxtype::all()->pluck('description', 'id'))
