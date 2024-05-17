@@ -417,7 +417,7 @@ class BookingRelationManager extends RelationManager
             Forms\Components\TextInput::make('barangay')
             ->dehydrated(false),
             Forms\Components\TextInput::make('manual_invoice')
-            ->visible( fn (): bool => auth()->user()->isAdmin() )
+            ->unique(ignoreRecord: true)
                 ->label('Manual Invoice'),
             Forms\Components\Select::make('boxtype_id')
                 ->live()
