@@ -306,9 +306,12 @@ class BookingRelationManager extends RelationManager
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make()
+                    ->visible( fn (): bool => auth()->user()->isAdmin() ),
+                    Tables\Actions\RestoreBulkAction::make()
+                    ->visible( fn (): bool => auth()->user()->isAdmin() ),
+                    Tables\Actions\DeleteBulkAction::make()
+                    ->visible( fn (): bool => auth()->user()->isAdmin() ),
                     Tables\Actions\BulkAction::make('Received Payment')
                         ->label('Received Payment')
                         ->color('warning')
