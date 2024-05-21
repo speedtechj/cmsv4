@@ -38,13 +38,16 @@ class Bookingobserver
                     'cbm' => $boxcbm,
                 ]
             );
-            $booking->update(
-                [
-                    'batch_id' => $currentbatch->id
-                ]
-            );
-
-
+            if($booking->batch_id == 23){
+                $booking->update(
+                    [
+                        'batch_id' => $currentbatch->id
+                    ]
+                );
+    
+    
+            }
+            
 
         }
 
@@ -95,7 +98,7 @@ class Bookingobserver
 
         } else {
             if ($skiddingresult->exists()) {
-                $currentbatch = Batch::where('is_current', true)->first();
+               
                 $skiddingresult->update(
                     [
                         'boxtype_id' => $booking->boxtype_id,
