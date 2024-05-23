@@ -136,8 +136,8 @@ class UpdatebatchstatusResource extends Resource
                     Forms\Components\TextInput::make('waybill'),
                     Forms\Components\Textarea::make('remarks')
                 ])
-                ->action(function (Invoicestatus $record, array $data): void {
-
+                ->action(function (Model $record, array $data): void {
+                  
                     $record->update([
                         'date_update' => $data['date_update'],
                         'remarks' => $data['remarks'],
