@@ -194,6 +194,9 @@ class BookingRelationManager extends RelationManager
                     Tables\Actions\ForceDeleteAction::make(),
                     Tables\Actions\RestoreAction::make(),
                 Tables\Actions\EditAction::make()
+                ->visible(function (Model $record): bool {
+                   return $record->batch_id == 23;
+                })
                 ->mutateRecordDataUsing(function (Model $record, array $data): array {
                     $reciveraddress = Receiveraddress::where('id', $record->receiveraddress_id)->first();
                     $data['province'] = $reciveraddress->provincephil->name;
@@ -223,7 +226,9 @@ class BookingRelationManager extends RelationManager
                         return $data;
                     }),
                 Tables\Actions\DeleteAction::make()
-                ->visible( fn (): bool => auth()->user()->isAdmin() ),
+                ->visible(function (Model $record): bool {
+                    return $record->batch_id == 23;
+                 }),
               
                     Tables\Actions\Action::make('Payment')
                         ->hidden(fn(Booking $record): bool => $record['payment_balance'] == 0)
