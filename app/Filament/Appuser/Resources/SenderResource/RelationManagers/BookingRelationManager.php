@@ -194,9 +194,6 @@ class BookingRelationManager extends RelationManager
                     Tables\Actions\ForceDeleteAction::make(),
                     Tables\Actions\RestoreAction::make(),
                 Tables\Actions\EditAction::make()
-                ->visible(function (Model $record): bool {
-                   return $record->batch_id == 23;
-                })
                 ->mutateRecordDataUsing(function (Model $record, array $data): array {
                     $reciveraddress = Receiveraddress::where('id', $record->receiveraddress_id)->first();
                     $data['province'] = $reciveraddress->provincephil->name;
@@ -423,7 +420,10 @@ class BookingRelationManager extends RelationManager
             ->dehydrated(false),
             Forms\Components\TextInput::make('manual_invoice')
             ->unique(ignoreRecord: true)
-                ->label('Manual Invoice'),
+                ->label('Manual Invoice')
+                ->visible(function (Model $record): bool {
+                    return $record->batch_id == 23;
+                 }),
             Forms\Components\Select::make('boxtype_id')
                 ->live()
                 ->options(Boxtype::all()->pluck('description', 'id'))
