@@ -106,7 +106,7 @@ class UpdatebatchstatusResource extends Resource
             SelectFilter::make('trackstatus_id')
                 ->multiple()
                 ->label('Status')
-                ->options(Trackstatus::all()->where('branch_id', auth()->user()->branch_id)->pluck('description', 'id'))
+                ->options(Trackstatus::all()->pluck('description', 'id'))
                 ->searchable(),
                 // ->default(array('Select Status')),
             SelectFilter::make('provincephil_id')
