@@ -194,7 +194,6 @@ class BookingRelationManager extends RelationManager
                     Tables\Actions\ForceDeleteAction::make(),
                     Tables\Actions\RestoreAction::make(),
                 Tables\Actions\EditAction::make()
-
                 ->mutateRecordDataUsing(function (Model $record, array $data): array {
                     $reciveraddress = Receiveraddress::where('id', $record->receiveraddress_id)->first();
                     $data['province'] = $reciveraddress->provincephil->name;
@@ -224,11 +223,7 @@ class BookingRelationManager extends RelationManager
                         return $data;
                     }),
                 Tables\Actions\DeleteAction::make()
-<<<<<<< HEAD
                 ->visible(function (Model $record): bool {
-=======
-               ->visible(function (Model $record): bool {
->>>>>>> 02c9039 (update)
                     return $record->batch_id == 23;
                  }),
               

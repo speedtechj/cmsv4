@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Shippinginstruction;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\InvoiceController;
@@ -17,5 +16,4 @@ use App\Http\Controllers\InvoiceController;
 */
 Route::get('{record}/barcode',[BarcodeController::class,'barcode'])->name('barcode1.pdf.download');
 Route::get('{record}/pdf',[InvoiceController::class,'invoice'])->name('barcode.pdf.download');
-Route::get('{record}/info',[Shippinginstruction::class,'instruction'])->name('instruction.pdf.download');
 

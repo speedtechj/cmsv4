@@ -137,11 +137,7 @@ class UpdatebatchstatusResource extends Resource
                     Forms\Components\Textarea::make('remarks')
                 ])
                 ->action(function (Model $record, array $data): void {
-<<<<<<< HEAD
                   
-=======
-
->>>>>>> 02c9039 (update)
                     $record->update([
                         'date_update' => $data['date_update'],
                         'remarks' => $data['remarks'],
